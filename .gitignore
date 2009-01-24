@@ -1,0 +1,5 @@
+Makefile
+*.pbc
+src/gen_*.pir
+t/*.text
+t/*.html
