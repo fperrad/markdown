@@ -79,10 +79,10 @@ help:
 	@echo ""
 
 test: all
-	cd .. && $(PERL) t/harness --languages=markdown
+	$(PERL) t/harness
 
 spectest: all t/MarkdownTest_1.0
-	cd .. && $(PERL) t/harness --languages=markdown
+	$(PERL) t/harness
 
 t/MarkdownTest_1.0.zip:
 	cd t && perl -MLWP::Simple -e "getstore(q{http:////daringfireball.net//projects//downloads//MarkdownTest_1.0.zip}, q{MarkdownTest_1.0.zip});"

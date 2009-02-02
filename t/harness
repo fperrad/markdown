@@ -34,10 +34,9 @@ use strict;
 use warnings;
 use 5.008;
 
-use lib qw( . lib ../lib ../../lib ../../lib );
+use lib qw( ../../lib );
 
-use Parrot::Test::Harness language => 'markdown',
-                          compiler => 'markdown.pbc';
+use Parrot::Test::Harness language => 'markdown';
 
 # Local Variables:
 #   mode: cperl
