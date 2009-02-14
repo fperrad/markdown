@@ -130,7 +130,8 @@ testclean:
 GEN_CLEANUPS = \
   markdown.pbc \
   src/gen_grammar.pir \
-  src/gen_actions.pir
+  src/gen_actions.pir \
+  src\gen_builtins.pir
 
 clean: testclean
 	$(RM_F) $(GEN_CLEANUPS)
