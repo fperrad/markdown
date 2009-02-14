@@ -111,6 +111,7 @@ codetest-perl:
 	- $(PERL) @build_dir@/t/codingstd/linelength.t $(T_PERL)
 	- $(PERL) @build_dir@/t/codingstd/perlcritic.t $(T_PERL)
 	- $(PERL) @build_dir@/t/codingstd/trailing_space.t $(T_PERL)
+	- $(PERL) @build_dir@/t/doc/pod.t $(T_PERL)
 
 codetest-pir:
 	- $(PERL) @build_dir@/t/codingstd/copyright.t $(T_PIR)
@@ -119,6 +120,7 @@ codetest-pir:
 	- $(PERL) @build_dir@/t/codingstd/pir_code_coda.t $(T_PIR)
 	- $(PERL) @build_dir@/t/codingstd/tabs.t $(T_PIR)
 	- $(PERL) @build_dir@/t/codingstd/trailing_space.t $(T_PIR)
+	- $(PERL) @build_dir@/t/doc/pod.t $(T_PIR)
 
 codetest-pod:
 
