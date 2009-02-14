@@ -2,11 +2,9 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 NAME
+=head1 A harness for Parrot Markdown
 
-languages/markdown/t/harness - A harness for Parrot Markdown
-
-=head1 SYNOPSIS
+=head2 Synopsis
 
     cd languages && make markdown.test
 
@@ -18,7 +16,7 @@ languages/markdown/t/harness - A harness for Parrot Markdown
 
     cd languages && perl -I../lib -Imarkdown/t markdown/t/harness markdown/t/examples.t
 
-=head1 DESCRIPTION
+=head2 Description
 
 If I'm called with a single
 argument of "--files", I just return a list of files to process.

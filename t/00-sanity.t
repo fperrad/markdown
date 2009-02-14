@@ -2,15 +2,13 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 NAME
+=head1 some Markdown examples
 
-t/examples.t - some Markdown examples
-
-=head1 SYNOPSIS
+=head2 Synopsis
 
     % perl t/00-sanity.t
 
-=head1 DESCRIPTION
+=head2 Description
 
 First tests in order to check infrastructure.
 

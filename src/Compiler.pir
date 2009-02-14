@@ -1,15 +1,13 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 NAME
+=head1 Markdown::HTML::Compiler - MAST Compiler
 
-Markdown::HTML::Compiler - MAST Compiler
-
-=head1 DESCRIPTION
+=head2 Description
 
 Markdown::HTML::Compiler implements a compiler for MAST nodes.
 
-=head1 METHODS
+=head2 Methods
 
 =over
 

@@ -2,15 +2,13 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 NAME
+=head1 the official test suite
 
-t/MarkdownTest.t - the official test suite
-
-=head1 SYNOPSIS
+=head2 Synopsis
 
     % perl t/MarkdownTest.t
 
-=head1 DESCRIPTION
+=head2 Description
 
 Run the tests of the official test suite.
 

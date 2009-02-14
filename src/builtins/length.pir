@@ -1,9 +1,7 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1
-
-length.pir -- simple implementation of a length function
+=head1 simple implementation of a length function
 
 =cut
 

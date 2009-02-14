@@ -2,11 +2,9 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 NAME
+=head1 Markdown escapes
 
-t/22-escape.t - Markdown escapes
-
-=head1 SYNOPSIS
+=head2 Synopsis
 
     % perl t/22-escape.t
 

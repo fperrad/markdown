@@ -1,11 +1,9 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 NAME
+=head1 MAST - Markdown abstract syntax tree
 
-MAST - Markdown abstract syntax tree
-
-=head1 DESCRIPTION
+=head2 Description
 
 This file implements the various abstract syntax tree nodes
 for Markdown.

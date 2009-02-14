@@ -1,11 +1,9 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
-=head1 TITLE
+=head1 A Markdown compiler.
 
-markdown.pir - A Markdown compiler.
-
-=head1 SYNOPSIS
+=head2 Synopsis
 
 as a command line (without interactive mode) :
 
@@ -27,7 +25,7 @@ or as a library :
      $S0 = $P1()
      print $S0
 
-=head1 DESCRIPTION
+=head2 Description
 
 This is the base file for the Markdown compiler.
 
@@ -35,7 +33,7 @@ This file includes the parsing and grammar rules from
 the src/ directory, loads the relevant PGE libraries,
 and registers the compiler under the name 'Markdown'.
 
-=head2 Functions
+=head3 Functions
 
 =over 4
 
@@ -128,7 +126,7 @@ to the Markdown compiler.
 
 =back
 
-=head1 SEE ALSO
+=head2 See Also
 
 L<http://daringfireball.net/projects/markdown/>
 
