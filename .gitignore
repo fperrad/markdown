@@ -1,5 +1,16 @@
 Makefile
+
 *.pbc
+*.c
+*.o
+*.obj
+*.exe
+markdown
+installable_markdown
+
+man
+
 src/gen_*.pir
+
 t/*.text
 t/*.html

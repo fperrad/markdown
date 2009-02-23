@@ -2,29 +2,46 @@
 # $Id$
 
 ## arguments we want to run parrot with
-PARROT_ARGS =
+PARROT_ARGS   =
 
 ## configuration settings
-BUILD_DIR     = @build_dir@
+VERSION       = @versiondir@
+BIN_DIR       = @bin_dir@
+LIB_DIR       = @lib_dir@$(VERSION)
+DOC_DIR       = @doc_dir@$(VERSION)
+MANDIR        = @mandir@$(VERSION)
+
+# Set up extensions
+O             = @o@
+
+# Various paths
+PERL6GRAMMAR  = $(LIB_DIR)/library/PGE/Perl6Grammar.pbc
+NQP           = $(LIB_DIR)/languages/nqp/nqp.pbc
+PCT           = $(LIB_DIR)/library/PCT.pbc
+PMC_DIR       = src/pmc
+OPS_DIR       = src/ops
 
 ## Setup some commands
+MAKE          = @make_c@
 PERL          = @perl@
+CAT           = @cat@
+CHMOD         = @chmod@
+CP            = @cp@
+MKPATH        = @mkpath@
 RM_F          = @rm_f@
 RM_RF         = @rm_rf@
-CP            = @cp@
-CAT           = @cat@
+POD2MAN       = pod2man
+#IF(parrot_is_shared and not(cygwin or win32)):export LD_RUN_PATH := @blib_dir@:$(LD_RUN_PATH)
 PARROT        = ../../parrot@exe@
+PBC_TO_EXE    = ../../pbc_to_exe@exe@
 #IF(darwin):
 #IF(darwin):# MACOSX_DEPLOYMENT_TARGET must be defined for OS X compilation/linking
 #IF(darwin):export MACOSX_DEPLOYMENT_TARGET := @osx_version@
 
-## places to look for things
-PGE_LIBRARY   = $(BUILD_DIR)/runtime/parrot/library/PGE
-PERL6GRAMMAR  = $(PGE_LIBRARY)/Perl6Grammar.pbc
-NQP           = $(BUILD_DIR)/compilers/nqp/nqp.pbc
-PCT           = $(BUILD_DIR)/runtime/parrot/library/PCT.pbc
 
-all: markdown.pbc
+build: markdown.pbc
+
+all: build markdown@exe@ installable
 
 SOURCES = \
   markdown.pir \
@@ -35,11 +52,16 @@ SOURCES = \
   src/gen_builtins.pir
 
 BUILTINS_PIR = \
-  src/builtins/length.pir \
+  src/builtins/length.pir
+
+DOCS = README
 
 # the default target
-markdown.pbc: $(PARROT) $(SOURCES)
+markdown.pbc: $(SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o markdown.pbc markdown.pir
+
+markdown@exe@: markdown.pbc
+	$(PBC_TO_EXE) markdown.pbc
 
 src/gen_grammar.pir: $(PERL6GRAMMAR) src/parser/grammar.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
@@ -51,7 +73,12 @@ src/gen_actions.pir: $(NQP) $(PCT) src/parser/actions.pm
 	    --target=pir src/parser/actions.pm
 
 src/gen_builtins.pir: $(BUILTINS_PIR)
-	$(CAT) $(BUILTINS_PIR) >src/gen_builtins.pir
+	$(CAT) $(BUILTINS_PIR) > src/gen_builtins.pir
+
+installable: installable_markdown@exe@
+
+installable_markdown@exe@: markdown.pbc
+	$(PBC_TO_EXE) markdown.pbc --install
 
 # regenerate the Makefile
 Makefile: config/makefiles/root.in
@@ -62,8 +89,12 @@ help:
 	@echo ""
 	@echo "Following targets are available for the user:"
 	@echo ""
-	@echo "  all:               markdown.pbc"
+	@echo "  build:             markdown.pbc"
 	@echo "                     This is the default."
+	@echo "  all:               markdown.pbc markdown@exe@ installable"
+	@echo "  installable:       Create libs and self-hosting binaries to be installed."
+	@echo "  install:           Install the installable targets and docs."
+	@echo ""
 	@echo "Testing:"
 	@echo "  test:              Run the test suite."
 	@echo "  testclean:         Clean up test results."
@@ -77,7 +108,7 @@ help:
 	@echo "  help:              Print this help message."
 	@echo ""
 
-test: all
+test: build
 	$(PERL) t/harness
 
 spectest: all t/MarkdownTest_1.0
@@ -124,6 +155,32 @@ codetest-pir:
 
 codetest-pod:
 
+
+install: installable
+	$(CP) installable_markdown@exe@ $(BIN_DIR)/parrot-markdown@exe@
+	$(CHMOD) 0755 $(BIN_DIR)/parrot-markdown@exe@
+	-$(MKPATH) $(LIB_DIR)/languages/markdown
+	$(CP) markdown.pbc $(LIB_DIR)/languages/markdown/markdown.pbc
+	-$(MKPATH) $(MANDIR)/man1
+	$(POD2MAN) markdown.pir > $(MANDIR)/man1/parrot-markdown.1
+	-$(MKPATH) $(DOC_DIR)/languages/markdown
+	$(CP) $(DOCS) $(DOC_DIR)/languages/markdown
+
+uninstall:
+	$(RM_F) $(BIN_DIR)/parrot-markdown@exe@
+	$(RM_RF) $(LIB_DIR)/languages/markdown
+	$(RM_F) $(MANDIR)/man1/parrot-markdown.1
+	$(RM_RF) $(DOC_DIR)/languages/markdown
+
+win32-inno-installer: installable
+	-$(MKPATH) man/man1
+	$(POD2MAN) markdown.pir > man/man1/parrot-markdown.1
+	-$(MKPATH) man/html
+	pod2html --infile markdown.pir --outfile man/html/parrot-markdown.html
+	$(CP) installable_markdown@exe@ parrot-markdown.exe
+	cd @build_dir@ && $(PERL) tools/dev/mk_inno_language.pl markdown
+	cd @build_dir@ && iscc parrot-markdown.iss
+
 TEST_CLEANUPS = \
   "t/*.html" \
   "t/*.text"
@@ -132,14 +189,17 @@ testclean:
 	$(RM_RF) t/MarkdownTest_1.0
 	$(RM_F) $(TEST_CLEANUPS)
 
-GEN_CLEANUPS = \
+CLEANUPS = \
   markdown.pbc \
-  src/gen_grammar.pir \
-  src/gen_actions.pir \
-  src\gen_builtins.pir
+  "src/gen_*.pir" \
+  "*.c" \
+  "*$(O)" \
+  markdown@exe@ \
+#IF(win32):  parrot-markdown.exe \
+  installable_markdown@exe@
 
 clean: testclean
-	$(RM_F) $(GEN_CLEANUPS)
+	$(RM_F) $(CLEANUPS)
 
 realclean: clean
 	$(RM_F) Makefile t/MarkdownTest_1.0.zip
@@ -150,3 +210,4 @@ distclean: realclean
 #   mode: makefile
 # End:
 # vim: ft=make:
+
