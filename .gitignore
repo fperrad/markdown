@@ -5,9 +5,11 @@ Makefile
 *.o
 *.obj
 *.exe
+*.iss
 markdown
 installable_markdown
 
+*.tmp
 man
 
 src/gen_*.pir
