@@ -32,29 +32,47 @@ RM_F          := @rm_f@
 RM_RF         := @rm_rf@
 POD2MAN       := pod2man
 #IF(parrot_is_shared and not(cygwin or win32)):export LD_RUN_PATH := @blib_dir@:$(LD_RUN_PATH)
-PARROT        := ../../parrot@exe@
-PBC_TO_EXE    := ../../pbc_to_exe@exe@
+PARROT        := $(BIN_DIR)/parrot@exe@
+PBC_TO_EXE    := $(BIN_DIR)/pbc_to_exe@exe@
 #IF(darwin):
 #IF(darwin):# MACOSX_DEPLOYMENT_TARGET must be defined for OS X compilation/linking
 #IF(darwin):export MACOSX_DEPLOYMENT_TARGET := @osx_version@
 
 
-build: markdown.pbc
-
-all: build markdown@exe@ installable
-
 SOURCES := \
-  markdown.pir \
   src/Compiler.pir \
   src/Node.pir \
   src/gen_grammar.pir \
   src/gen_actions.pir \
-  src/gen_builtins.pir
+  src/gen_builtins.pir \
+  markdown.pir
 
 BUILTINS_PIR := \
   src/builtins/length.pir
 
 DOCS := README
+
+BUILD_CLEANUPS := \
+  man \
+  markdown.pbc \
+  "src/gen_*.pir" \
+  "*.c" \
+  "*$(O)" \
+  markdown@exe@ \
+#IF(win32):  parrot-markdown.exe \
+#IF(win32):  parrot-markdown.iss \
+#IF(win32):  "setup-parrot-*.exe" \
+  installable_markdown@exe@
+
+TEST_CLEANUPS := \
+  t/MarkdownTest_1.0 \
+  "t/*.html" \
+  "t/*.text"
+
+# the default target
+build: markdown.pbc
+
+all: build markdown@exe@ installable
 
 markdown.pbc: $(SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o markdown.pbc markdown.pir
@@ -67,7 +85,7 @@ src/gen_grammar.pir: $(PERL6GRAMMAR) src/parser/grammar.pg
 	    --output=src/gen_grammar.pir \
 	    src/parser/grammar.pg
 
-src/gen_actions.pir: $(NQP) $(PCT) src/parser/actions.pm
+src/gen_actions.pir: $(NQP) src/parser/actions.pm
 	$(PARROT) $(PARROT_ARGS) $(NQP) --output=src/gen_actions.pir \
 	    --target=pir src/parser/actions.pm
 
@@ -79,7 +97,6 @@ installable: installable_markdown@exe@
 installable_markdown@exe@: markdown.pbc
 	$(PBC_TO_EXE) markdown.pbc --install
 
-# regenerate the Makefile
 Makefile: config/makefiles/root.in
 	$(PERL) Configure.pl
 
@@ -90,12 +107,14 @@ help:
 	@echo ""
 	@echo "  build:             markdown.pbc"
 	@echo "                     This is the default."
+	@echo "  markdown@exe@       Self-hosting binary not to be installed."
 	@echo "  all:               markdown.pbc markdown@exe@ installable"
 	@echo "  installable:       Create libs and self-hosting binaries to be installed."
 	@echo "  install:           Install the installable targets and docs."
 	@echo ""
 	@echo "Testing:"
 	@echo "  test:              Run the test suite."
+	@echo "  test-installable:  Test self-hosting targets."
 	@echo "  testclean:         Clean up test results."
 	@echo ""
 	@echo "Cleaning:"
@@ -108,7 +127,7 @@ help:
 	@echo ""
 
 test: build
-	$(PERL) t/harness
+	$(PERL) -I$(LIB_DIR)/tools/lib t/harness
 
 spectest: all t/MarkdownTest_1.0
 	$(PERL) t/harness
@@ -154,6 +173,9 @@ codetest-pir:
 
 codetest-pod:
 
+# basic run for missing libs
+test-installable: installable
+	echo "1" | ./installable_markdown@exe@
 
 install: installable
 	$(CP) installable_markdown@exe@ $(BIN_DIR)/parrot-markdown@exe@
@@ -177,34 +199,17 @@ win32-inno-installer: installable
 	-$(MKPATH) man/html
 	pod2html --infile markdown.pir --outfile man/html/parrot-markdown.html
 	$(CP) installable_markdown@exe@ parrot-markdown.exe
-	$(PERL) @build_dir@/tools/dev/mk_inno_language.pl markdown
+	$(PERL) -I$(LIB_DIR)/tools/lib $(LIB_DIR)/tools/dev/mk_inno_language.pl markdown
 	iscc parrot-markdown.iss
 
-TEST_CLEANUPS := \
-  "t/*.html" \
-  "t/*.text"
-
 testclean:
-	$(RM_RF) t/MarkdownTest_1.0
-	$(RM_F) $(TEST_CLEANUPS)
+	$(RM_RF) $(TEST_CLEANUPS)
 
-CLEANUPS := \
-  markdown.pbc \
-  "src/gen_*.pir" \
-  "*.c" \
-  "*$(O)" \
-  markdown@exe@ \
-#IF(win32):  parrot-markdown.exe \
-#IF(win32):  parrot-markdown.iss \
-#IF(win32):  "setup-parrot-*.exe" \
-  installable_markdown@exe@
+clean:
+	$(RM_RF) $(TEST_CLEANUPS) $(BUILD_CLEANUPS)
 
-clean: testclean
-	$(RM_F) $(CLEANUPS)
-	$(RM_RF) man
-
-realclean: clean
-	$(RM_F) Makefile t/MarkdownTest_1.0.zip
+realclean:
+	$(RM_F) $(TEST_CLEANUPS) $(BUILD_CLEANUPS) Makefile t/MarkdownTest_1.0.zip
 
 distclean: realclean
 
