@@ -111,7 +111,6 @@ help:
 	@echo ""
 	@echo "Testing:"
 	@echo "  test:              Run the test suite."
-	@echo "  test-installable:  Test self-hosting targets."
 	@echo "  testclean:         Clean up test results."
 	@echo ""
 	@echo "Cleaning:"
@@ -169,10 +168,6 @@ codetest-pir:
 	- $(PERL) @build_dir@/t/doc/pod.t $(T_PIR)
 
 codetest-pod:
-
-# basic run for missing libs
-test-installable: installable
-	echo "1" | ./installable_markdown@exe@
 
 install: installable
 	$(CP) installable_markdown@exe@ $(BIN_DIR)/parrot-markdown@exe@
