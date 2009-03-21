@@ -38,6 +38,12 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     .return (str)
 .end
 
+.sub 'obscure_text' :anon
+    .param string str
+    # TODO
+    .return (str)
+.end
+
 =item html_children(node)
 
 Return generated HTML for all of its children.
@@ -202,6 +208,52 @@ Return generated HTML for all of its children.
     $S0 = "<li>"
     $S0 .= $S1
     $S0 .= "</li>\n"
+    set code, $S0
+    .return (code)
+.end
+
+=item html(Markdown::Link node)
+
+=cut
+
+.sub 'html' :method :multi(_,['Markdown';'Link'])
+    .param pmc node
+    .local pmc code
+    new code, 'CodeString'
+    $S0 = "<a href=\""
+    $S1 = node.'url'()
+    $S0 .= $S1
+    $S1 = node.'title'()
+    unless $S1 goto L1
+    $S0 .= "\" title=\""
+    $S0 .= $S1
+  L1:
+    $S0 .= "\">"
+    $S1 = node.'text'()
+    $S0 .= $S1
+    $S0 .= "</a>"
+    set code, $S0
+    .return (code)
+.end
+
+=item html(Markdown::Email node)
+
+=cut
+
+.sub 'html' :method :multi(_,['Markdown';'Email'])
+    .param pmc node
+    .local pmc code
+    new code, 'CodeString'
+    $S0 = "<a href=\""
+    $S1 = node.'text'()
+    $S1 = 'mailto:' . $S1
+    $S1 = obscure_text($S1)
+    $S0 .= $S1
+    $S0 .= "\">"
+    $S1 = node.'text'()
+    $S1 = obscure_text($S1)
+    $S0 .= $S1
+    $S0 .= "</a>"
     set code, $S0
     .return (code)
 .end

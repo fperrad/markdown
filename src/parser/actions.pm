@@ -212,6 +212,23 @@ method StrongUI($/) {
     make $mast;
 }
 
+method Link($/, $key) {
+    make $( $/{$key} );
+}
+
+method AutoLink($/, $key) {
+    make $( $/{$key} );
+}
+
+method AutoLinkUrl($/) {
+    make Markdown::Link.new( :text( $/[0].text() ),
+                             :url( $/[0].text() ) );
+}
+
+method AutoLinkEmail($/) {
+    make Markdown::Email.new( :text( $/[0].text() ) );
+}
+
 method Code($/) {
     make Markdown::Code.new( :text( $/[0].text() ) );
 }

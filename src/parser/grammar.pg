@@ -184,6 +184,7 @@ token Inline {
     | <Space> {*}               #= Space
     | <Strong> {*}              #= Strong
     | <Emph> {*}                #= Emph
+    | <Link> {*}                #= Link
     | <Code> {*}                #= Code
     | <Entity> {*}              #= Entity
     | <EscapedChar> {*}         #= EscapedChar
@@ -287,6 +288,27 @@ token StrongUI {
     <.TwoUIOpen> [ <!TwoUIClose> <Inline> ]* <TwoUIClose>
     {*}
 }
+
+token Link {
+    | <AutoLink> {*}            #= AutoLink
+}
+
+token AutoLink {
+    | <AutoLinkUrl> {*}         #= AutoLinkUrl
+    | <AutoLinkEmail> {*}       #= AutoLinkEmail
+}
+
+token AutoLinkUrl {
+    '<' ( <[A..Za..z]>+ '://' [ <!Newline> <!_Gt> . ]+ ) '>'
+    {*}
+}
+
+token AutoLinkEmail {
+    '<' ( <[\-A..Za..z0..9+_]>+ '@' [ <!Newline> <!_Gt> . ]+ ) '>'
+    {*}
+}
+
+token _Gt { '>' }
 
 token Ticks1 { '`' }
 token Ticks2 { '``' }
