@@ -126,8 +126,8 @@ help:
 test: build
 	$(PERL) -I$(LIB_DIR)/tools/lib t/harness
 
-spectest: all t/MarkdownTest_1.0
-	$(PERL) t/harness
+spectest: build t/MarkdownTest_1.0
+	$(PERL) -I$(LIB_DIR)/tools/lib t/harness
 
 t/MarkdownTest_1.0.zip:
 	cd t && perl -MLWP::Simple -e "getstore(q{http:////daringfireball.net//projects//downloads//MarkdownTest_1.0.zip}, q{MarkdownTest_1.0.zip});"

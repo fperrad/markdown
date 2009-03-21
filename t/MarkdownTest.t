@@ -24,7 +24,7 @@ use Test::More;
 use File::Basename;
 use File::Spec;
 
-my @dir = ( 'markdown', 't', 'MarkdownTest_1.0', 'Tests' );
+my @dir = ( 't', 'MarkdownTest_1.0', 'Tests' );
 my @test_files = glob( File::Spec->catfile( @dir, '*.text' ) );
 
 if ( scalar @test_files ) {
