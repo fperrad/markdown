@@ -21,6 +21,7 @@ PCT           := $(LIB_DIR)/library/PCT.pbc
 
 ## Setup some commands
 PERL          := @perl@
+PROVE         := @perl@ -I@build_dir@/lib
 CAT           := @cat@
 CHMOD         := @chmod@
 CP            := @cp@
@@ -143,29 +144,29 @@ T_PIR   := markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pi
 codetest-c:
 
 codetest-make:
-	- $(PERL) @build_dir@/t/codingstd/copyright.t $(T_MAKE)
-	- $(PERL) @build_dir@/t/codingstd/filenames.t $(T_MAKE)
-	- $(PERL) @build_dir@/t/codingstd/make_code_coda.t $(T_MAKE)
-	- $(PERL) @build_dir@/t/codingstd/linelength.t $(T_MAKE)
-	- $(PERL) @build_dir@/t/codingstd/trailing_space.t $(T_MAKE)
+	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_MAKE)
+	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_MAKE)
+	- $(PROVE) @build_dir@/t/codingstd/make_code_coda.t $(T_MAKE)
+	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_MAKE)
+	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_MAKE)
 
 codetest-perl:
-	- $(PERL) @build_dir@/t/codingstd/copyright.t $(T_PERL)
-	- $(PERL) @build_dir@/t/codingstd/cuddled_else.t $(T_PERL)
-	- $(PERL) @build_dir@/t/codingstd/filenames.t $(T_PERL)
-	- $(PERL) @build_dir@/t/codingstd/linelength.t $(T_PERL)
-	- $(PERL) @build_dir@/t/codingstd/perlcritic.t $(T_PERL)
-	- $(PERL) @build_dir@/t/codingstd/trailing_space.t $(T_PERL)
-	- $(PERL) @build_dir@/t/doc/pod.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/cuddled_else.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/perlcritic.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_PERL)
+	- $(PROVE) @build_dir@/t/codingstd/pod_syntax.t $(T_PERL)
 
 codetest-pir:
-	- $(PERL) @build_dir@/t/codingstd/copyright.t $(T_PIR)
-	- $(PERL) @build_dir@/t/codingstd/filenames.t $(T_PIR)
-	- $(PERL) @build_dir@/t/codingstd/linelength.t $(T_PIR)
-	- $(PERL) @build_dir@/t/codingstd/pir_code_coda.t $(T_PIR)
-	- $(PERL) @build_dir@/t/codingstd/tabs.t $(T_PIR)
-	- $(PERL) @build_dir@/t/codingstd/trailing_space.t $(T_PIR)
-	- $(PERL) @build_dir@/t/doc/pod.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/pir_code_coda.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/tabs.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_PIR)
+	- $(PROVE) @build_dir@/t/codingstd/pod_syntax.t $(T_PIR)
 
 codetest-pod:
 

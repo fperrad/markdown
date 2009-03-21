@@ -9,6 +9,7 @@ Makefile
 markdown
 installable_markdown
 
+*.sto
 *.tmp
 man
 
