@@ -2,7 +2,7 @@
 # Copyright (C) 2009, Parrot Foundation.
 # $Id$
 
-=head1 Markdown emphasis
+=head1 Markdown automatic link
 
 =head2 Synopsis
 
