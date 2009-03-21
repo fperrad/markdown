@@ -18,11 +18,8 @@ O             := @o@
 PERL6GRAMMAR  := $(LIB_DIR)/library/PGE/Perl6Grammar.pbc
 NQP           := $(LIB_DIR)/languages/nqp/nqp.pbc
 PCT           := $(LIB_DIR)/library/PCT.pbc
-PMC_DIR       := src/pmc
-OPS_DIR       := src/ops
 
 ## Setup some commands
-MAKE          := @make_c@
 PERL          := @perl@
 CAT           := @cat@
 CHMOD         := @chmod@
