@@ -226,10 +226,13 @@ Return generated HTML for all of its children.
     $S1 = node.'title'()
     unless $S1 goto L1
     $S0 .= "\" title=\""
+    $I0 = length $S1
+    $I0 -= 2
+    $S1 = substr $S1, 1, $I0
     $S0 .= $S1
   L1:
     $S0 .= "\">"
-    $S1 = node.'text'()
+    $S1 = self.'html_children'(node)
     $S0 .= $S1
     $S0 .= "</a>"
     set code, $S0

@@ -216,13 +216,23 @@ method Link($/, $key) {
     make $( $/{$key} );
 }
 
+method ExplicitLink($/) {
+    my $mast := Markdown::Link.new( :title( ~$<Title>.text() ),
+                                    :url( ~$<Source><SourceContents>.text() ) );
+    for $<Label><Inline> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
+}
+
 method AutoLink($/, $key) {
     make $( $/{$key} );
 }
 
 method AutoLinkUrl($/) {
-    make Markdown::Link.new( :text( $/[0].text() ),
-                             :url( $/[0].text() ) );
+    my $mast := Markdown::Link.new( :url( $/[0].text() ) );
+    $mast.push( Markdown::Line.new( :text( $/[0].text() ) ));
+    make $mast
 }
 
 method AutoLinkEmail($/) {

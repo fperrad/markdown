@@ -291,6 +291,45 @@ token StrongUI {
 
 token Link {
     | <AutoLink> {*}            #= AutoLink
+    | <ExplicitLink> {*}        #= ExplicitLink
+}
+
+token ExplicitLink {
+    <Label> <.Spnl> '(' <.Sp> <Source> <.Spnl> <Title> <.Sp> ')'
+    {*}
+}
+
+token Source {
+    | '<' <SourceContents> '>'
+    | <SourceContents>
+}
+
+token SourceContents {
+    [ <!_Sc> <Nonspacechar> ]*
+}
+
+token _Sc { '(' | ')' | '>' }
+
+token Title {
+    | <TitleSingle>
+    | <TitleDouble>
+    | ''
+}
+
+token TitleSingle {
+    '\'' ( [ <!_TitleS> <!Newline> . ]* ) '\''
+}
+
+token _TitleS {
+    '\'' <.Sp> [ ')' | <.Newline> ]
+}
+
+token TitleDouble {
+    '"' ( [ <!_TitleD> <!Newline> . ]* ) '"'
+}
+
+token _TitleD {
+    '"' <.Sp> [ ')' | <.Newline> ]
 }
 
 token AutoLink {
@@ -309,6 +348,12 @@ token AutoLinkEmail {
 }
 
 token _Gt { '>' }
+
+token Label {
+    '[' [ <!_EndLabel> <Inline> ]* ']'
+}
+
+token _EndLabel { ']' }
 
 token Ticks1 { '`' }
 token Ticks2 { '``' }
@@ -381,6 +426,8 @@ token Nonspacechar { <!Spacechar> <!Newline> . }
 token Newline { \n }
 
 token Sp { <Spacechar>* }
+
+token Spnl { <.Sp> [<.Newline> <.Sp>]? }
 
 token SpecialChar { '*' | '_' | '`' | '&' | '[' | ']' | '<' | '!' | '\\' }
 
