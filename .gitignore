@@ -18,3 +18,4 @@ src/gen_*.pir
 t/*.text
 t/*.html
 t/*.zip
+t/MarkdownTest_1.0
