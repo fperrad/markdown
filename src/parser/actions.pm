@@ -239,7 +239,7 @@ method ReferenceLinkSingle($/) {
 }
 
 method ExplicitLink($/) {
-    my $mast := Markdown::Link.new( :title( ~$<Title>.text() ),
+    my $mast := Markdown::Link.new( :title( ~$<Title>[0].text() ),
                                     :url( ~$<Source><SourceContents>.text() ) );
     for $<Label><Inline> {
         $mast.push( $( $_ ) );
@@ -263,7 +263,7 @@ method AutoLinkEmail($/) {
 
 method Reference($/) {
     my $mast := Markdown::Reference.new( );
-    $mast.insert( ~$<Label>.text(), ~$<RefSrc>.text(), ~$<RefTitle>.text());
+    $mast.insert( ~$<Label>.text(), ~$<RefSrc>.text(), ~$<RefTitle>[0].text() );
     make $mast
 }
 

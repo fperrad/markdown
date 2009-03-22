@@ -338,21 +338,15 @@ token SourceContents {
 token _Sc { '(' | ')' | '>' }
 
 token Title {
-    | <TitleSingle>
-    | <TitleDouble>
-    | ''
-}
-
-token TitleSingle {
-    '\'' ( [ <!_TitleS> <!Newline> . ]* ) '\''
+    # TitleSingle
+    | '\'' ( [ <!_TitleS> <!Newline> . ]* ) '\''
+    # TitleDouble
+    | '"' ( [ <!_TitleD> <!Newline> . ]* ) '"'
+    | ( '' )
 }
 
 token _TitleS {
     '\'' <.Sp> [ ')' | <.Newline> ]
-}
-
-token TitleDouble {
-    '"' ( [ <!_TitleD> <!Newline> . ]* ) '"'
 }
 
 token _TitleD {
@@ -390,32 +384,22 @@ token _EndLabel { ']' }
 token RefSrc { <.Nonspacechar>+ }
 
 token RefTitle {
-    | <RefTitleSingle>
-    | <RefTitleDouble>
-    | <RefTitleParens>
-    | <EmptyTitle>
-}
-
-token EmptyTitle { '' }
-
-token RefTitleSingle {
-    '\'' ( [ <!_RefTitleS> . ]* ) '\''
+    # RefTitleSingle
+    | '\'' ( [ <!_RefTitleS> . ]* ) '\''
+    # RefTitleDouble
+    | '"' ( [ <!_RefTitleD> . ]* ) '"'
+    # RefTitleParens
+    | '(' ( [ <!_RefTitleP> . ]* ) ')'
+    # EmptyTitle
+    | ( '' )
 }
 
 token _RefTitleS {
     [ '\'' <.Sp> <.Newline> | <.Newline> ]
 }
 
-token RefTitleDouble {
-    '"' ( [ <!_RefTitleD> . ]* ) '"'
-}
-
 token _RefTitleD {
     [ '"' <.Sp> <.Newline> | <.Newline> ]
-}
-
-token RefTitleParens {
-    '(' ( [ <!_RefTitleP> . ]* ) ')'
 }
 
 token _RefTitleP {

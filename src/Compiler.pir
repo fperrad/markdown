@@ -231,9 +231,6 @@ Return generated HTML for all of its children.
     $S1 = node.'title'()
     unless $S1 goto L1
     $S0 .= "\" title=\""
-    $I0 = length $S1
-    $I0 -= 2
-    $S1 = substr $S1, 1, $I0
     $S0 .= $S1
   L1:
     $S0 .= "\">"
@@ -251,11 +248,6 @@ Return generated HTML for all of its children.
     $S0 .= $S1
     $S0 .= "\" title=\""
     $S1 = node.'title'()
-    unless $S1 goto L2
-    $I0 = length $S1
-    $I0 -= 2
-    $S1 = substr $S1, 1, $I0
-  L2:
     $S0 .= $S1
     $S0 .= "\" />"
     set code, $S0
@@ -282,9 +274,6 @@ Return generated HTML for all of its children.
     $S1 = $P1[1]
     unless $S1 goto L1
     $S0 .= "\" title=\""
-    $I0 = length $S1
-    $I0 -= 2
-    $S1 = substr $S1, 1, $I0
     $S0 .= $S1
   L1:
     $S0 .= "\">"
@@ -307,11 +296,6 @@ Return generated HTML for all of its children.
     $S0 .= $S1
     $S0 .= "\" title=\""
     $S1 = $P1[1]
-    unless $S1 goto L3
-    $I0 = length $S1
-    $I0 -= 2
-    $S1 = substr $S1, 1, $I0
-  L3:
     $S0 .= $S1
     $S0 .= "\" />"
     set code, $S0
