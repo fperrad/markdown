@@ -30,6 +30,7 @@ for Markdown.
     p6meta.'new_class'('Markdown::ListItem', 'parent'=>base)
     p6meta.'new_class'('Markdown::OrderedList', 'parent'=>base)
     p6meta.'new_class'('Markdown::Para', 'parent'=>base)
+    p6meta.'new_class'('Markdown::RefLink', 'parent'=>base)
     p6meta.'new_class'('Markdown::Space', 'parent'=>base)
     p6meta.'new_class'('Markdown::Strong', 'parent'=>base)
     p6meta.'new_class'('Markdown::Title', 'parent'=>base)
@@ -56,6 +57,15 @@ for Markdown.
     .param pmc value           :optional
     .param int has_value       :opt_flag
     .tailcall self.'attr'('url', value, has_value)
+.end
+
+
+.namespace [ 'Markdown';'RefLink' ]
+
+.sub 'key' :method
+    .param pmc value           :optional
+    .param int has_value       :opt_flag
+    .tailcall self.'attr'('key', value, has_value)
 .end
 
 

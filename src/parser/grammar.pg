@@ -292,6 +292,24 @@ token StrongUI {
 token Link {
     | <AutoLink> {*}            #= AutoLink
     | <ExplicitLink> {*}        #= ExplicitLink
+    | <ReferenceLink> {*}       #= ReferenceLink
+}
+
+token ReferenceLink {
+    | <ReferenceLinkDouble> {*} #= ReferenceLinkDouble
+    | <ReferenceLinkSingle> {*} #= ReferenceLinkSingle
+}
+
+token _EmptyLabel { '[]' }
+
+token ReferenceLinkDouble {
+    <Label> <.Spnl> <!_EmptyLabel> <Label>
+    {*}
+}
+
+token ReferenceLinkSingle {
+    <Label> [ <.Spnl> <._EmptyLabel> ]?
+    {*}
 }
 
 token ExplicitLink {

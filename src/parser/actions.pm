@@ -216,6 +216,22 @@ method Link($/, $key) {
     make $( $/{$key} );
 }
 
+method ReferenceLink($/, $key) {
+    make $( $/{$key} );
+}
+
+method ReferenceLinkDouble($/) {
+    my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].text() ) );
+    for $<Label>[0]<Inline> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
+}
+
+method ReferenceLinkSingle($/) {
+    make Markdown::RefLink.new( :key( ~$<Label>.text() ) );
+}
+
 method ExplicitLink($/) {
     my $mast := Markdown::Link.new( :title( ~$<Title>.text() ),
                                     :url( ~$<Source><SourceContents>.text() ) );

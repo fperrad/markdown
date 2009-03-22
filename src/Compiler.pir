@@ -239,6 +239,28 @@ Return generated HTML for all of its children.
     .return (code)
 .end
 
+=item html(Markdown::RefLink node)
+
+=cut
+
+.sub 'html' :method :multi(_,['Markdown';'RefLink'])
+    .param pmc node
+    .local pmc code
+    new code, 'CodeString'
+    $S0 = "<a href=\"\">"
+    $S1 = self.'html_children'(node)
+    if $S1 goto L1
+    $S1 = node.'key'()
+    $I0 = length $S1
+    $I0 -= 2
+    $S1 = substr $S1, 1, $I0
+  L1:
+    $S0 .= $S1
+    $S0 .= "</a>"
+    set code, $S0
+    .return (code)
+.end
+
 =item html(Markdown::Email node)
 
 =cut
