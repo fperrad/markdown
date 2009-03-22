@@ -19,6 +19,7 @@ token TOP {
 token Block {
     <.BlankLine>* [
         | <BlockQuote> {*}      #= BlockQuote
+        | <Reference> {*}       #= Reference
         | <HorizontalRule> {*}  #= HorizontalRule
         | <Heading> {*}         #= Heading
         | <OrderedList> {*}     #= OrderedList
@@ -367,11 +368,51 @@ token AutoLinkEmail {
 
 token _Gt { '>' }
 
+token Reference {
+    <.NonindentSpace> <!_EmptyLabel> <Label> ':' <.Spnl> <RefSrc> <.Spnl> <RefTitle> <.BlankLine>*
+    {*}
+}
+
 token Label {
     '[' [ <!_EndLabel> <Inline> ]* ']'
 }
 
 token _EndLabel { ']' }
+
+token RefSrc { <.Nonspacechar>+ }
+
+token RefTitle {
+    | <RefTitleSingle>
+    | <RefTitleDouble>
+    | <RefTitleParens>
+    | <EmptyTitle>
+}
+
+token EmptyTitle { '' }
+
+token RefTitleSingle {
+    '\'' ( [ <!_RefTitleS> . ]* ) '\''
+}
+
+token _RefTitleS {
+    [ '\'' <.Sp> <.Newline> | <.Newline> ]
+}
+
+token RefTitleDouble {
+    '"' ( [ <!_RefTitleD> . ]* ) '"'
+}
+
+token _RefTitleD {
+    [ '"' <.Sp> <.Newline> | <.Newline> ]
+}
+
+token RefTitleParens {
+    '(' ( [ <!_RefTitleP> . ]* ) ')'
+}
+
+token _RefTitleP {
+    [ ')' <.Sp> <.Newline> | <.Newline> ]
+}
 
 token Ticks1 { '`' }
 token Ticks2 { '``' }

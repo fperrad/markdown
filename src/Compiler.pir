@@ -261,6 +261,18 @@ Return generated HTML for all of its children.
     .return (code)
 .end
 
+=item html(Markdown::Reference node)
+
+=cut
+
+.sub 'html' :method :multi(_,['Markdown';'Reference'])
+    .param pmc node
+    .local pmc code
+    new code, 'CodeString'
+    set code, ''
+    .return (code)
+.end
+
 =item html(Markdown::Email node)
 
 =cut

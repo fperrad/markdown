@@ -255,6 +255,10 @@ method AutoLinkEmail($/) {
     make Markdown::Email.new( :text( $/[0].text() ) );
 }
 
+method Reference($/) {
+    make Markdown::Reference.new( );
+}
+
 method Code($/) {
     make Markdown::Code.new( :text( $/[0].text() ) );
 }
