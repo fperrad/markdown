@@ -194,11 +194,11 @@ token Inline {
 }
 
 token Space {
-    <Spacechar>+ {*}
+    <.Spacechar>+ {*}
 }
 
 token Str {
-    <NormalChar>+ {*}
+    <.NormalChar>+ {*}
 }
 
 token EscapedChar {
@@ -332,7 +332,7 @@ token Source {
 }
 
 token SourceContents {
-    [ <!_Sc> <Nonspacechar> ]*
+    [ <!_Sc> <.Nonspacechar> ]*
 }
 
 token _Sc { '(' | ')' | '>' }
