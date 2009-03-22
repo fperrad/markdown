@@ -30,7 +30,16 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     .tailcall self.'html'(past)
 .end
 
-.sub 'xml_escape' :anon
+.sub 'escape_xml' :anon
+    .param string str
+    $P0 = split '&', str
+    str = join '&amp;', $P0
+    $P0 = split '<', str
+    str = join '&lt;', $P0
+    .return (str)
+.end
+
+.sub 'escape_code' :anon
     .param string str
     $P0 = split '&', str
     str = join '&amp;', $P0
@@ -243,10 +252,12 @@ Return generated HTML for all of its children.
     if $S0 goto L0
     $S0 = "<a href=\""
     $S1 = node.'url'()
+    $S1 = escape_xml($S1)
     $S0 .= $S1
     $S1 = node.'title'()
     unless $S1 goto L1
     $S0 .= "\" title=\""
+    $S1 = escape_xml($S1)
     $S0 .= $S1
   L1:
     $S0 .= "\">"
@@ -264,6 +275,7 @@ Return generated HTML for all of its children.
     $S0 .= $S1
     $S0 .= "\" title=\""
     $S1 = node.'title'()
+    $S1 = escape_xml($S1)
     $S0 .= $S1
     $S0 .= "\" />"
     set code, $S0
@@ -286,10 +298,12 @@ Return generated HTML for all of its children.
     if $S0 goto L0
     $S0 = "<a href=\""
     $S1 = $P1[0]
+    $S1 = escape_xml($S1)
     $S0 .= $S1
     $S1 = $P1[1]
     unless $S1 goto L1
     $S0 .= "\" title=\""
+    $S1 = escape_xml($S1)
     $S0 .= $S1
   L1:
     $S0 .= "\">"
@@ -306,12 +320,14 @@ Return generated HTML for all of its children.
   L0:
     $S0 = "<img src=\""
     $S1 = $P1[0]
+    $S1 = escape_xml($S1)
     $S0 .= $S1
     $S0 .= "\" alt=\""
     $S1 = self.'html_children'(node)
     $S0 .= $S1
     $S0 .= "\" title=\""
     $S1 = $P1[1]
+    $S1 = escape_xml($S1)
     $S0 .= $S1
     $S0 .= "\" />"
     set code, $S0
@@ -392,7 +408,7 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Code'])
     .param pmc node
     $S1 = node.'text'()
-    $S1 = xml_escape($S1)
+    $S1 = escape_code($S1)
     .local pmc code
     new code, 'CodeString'
     $S0 = "<code>"
@@ -422,7 +438,7 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Line'])
     .param pmc node
     $S1 = node.'text'()
-    $S1 = xml_escape($S1)
+    $S1 = escape_xml($S1)
     .local pmc code
     new code, 'CodeString'
     set code, $S1
@@ -436,7 +452,7 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Word'])
     .param pmc node
     $S1 = node.'text'()
-    $S1 = xml_escape($S1)
+    $S1 = escape_xml($S1)
     .local pmc code
     new code, 'CodeString'
     set code, $S1
