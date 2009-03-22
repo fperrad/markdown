@@ -43,8 +43,24 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
 
 .sub 'obscure_text' :anon
     .param string str
-    # TODO
-    .return (str)
+    $S0 = ''
+    new $P1, 'FixedPMCArray'
+    set $P1, 1
+    $P0 = split '', str
+  L1:
+    unless $P0 goto L2
+    $S1 = shift $P0
+    unless $S1 == ':' goto L3
+    $S0 .= $S1
+    goto L1
+  L3:
+    $I1 = ord $S1
+    $P1[0] = $I1
+    $S1 = sprintf '&#x%X;', $P1
+    $S0 .= $S1
+    goto L1
+  L2:
+    .return ($S0)
 .end
 
 =item html_children(node)
@@ -328,8 +344,9 @@ Return generated HTML for all of its children.
     $S1 = obscure_text($S1)
     $S0 .= $S1
     $S0 .= "\">"
-    $S1 = node.'text'()
-    $S1 = obscure_text($S1)
+    $I0 = index $S1, ':'
+    inc $I0
+    $S1 = substr $S1, $I0
     $S0 .= $S1
     $S0 .= "</a>"
     set code, $S0
