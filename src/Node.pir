@@ -70,6 +70,22 @@ for Markdown.
 .end
 
 
+.namespace [ 'Markdown';'Reference' ]
+
+.sub 'insert' :method
+    .param string key
+    .param string url
+    .param string title
+    $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
+    $P1 = new 'FixedStringArray'
+    set $P1, 2
+    $P1[0] = url
+    $P1[1] = title
+    $S0 = downcase key
+    $P0[$S0] = $P1
+.end
+
+
 .namespace [ 'Markdown';'Title' ]
 
 .sub 'level' :method

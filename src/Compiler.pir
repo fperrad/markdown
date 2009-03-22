@@ -18,6 +18,9 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
 .sub '__onload' :anon :load :init
     $P0 = get_hll_global 'P6metaclass'
     $P0 = $P0.'new_class'('Markdown::HTML::Compiler')
+
+    $P0 = new 'Hash'
+    set_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref', $P0
 .end
 
 .sub 'to_html' :method
@@ -246,15 +249,29 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'RefLink'])
     .param pmc node
     .local pmc code
+    $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
+    $S2 = node.'key'()
+    $S0 = downcase $S2
+    $P1 = $P0[$S0]
     new code, 'CodeString'
-    $S0 = "<a href=\"\">"
-    $S1 = self.'html_children'(node)
-    if $S1 goto L1
-    $S1 = node.'key'()
+    $S0 = "<a href=\""
+    $S1 = $P1[0]
+    $S0 .= $S1
+    $S1 = $P1[1]
+    unless $S1 goto L1
+    $S0 .= "\" title=\""
     $I0 = length $S1
     $I0 -= 2
     $S1 = substr $S1, 1, $I0
+    $S0 .= $S1
   L1:
+    $S0 .= "\">"
+    $S1 = self.'html_children'(node)
+    if $S1 goto L2
+    $I0 = length $S2
+    $I0 -= 2
+    $S1 = substr $S2, 1, $I0
+  L2:
     $S0 .= $S1
     $S0 .= "</a>"
     set code, $S0

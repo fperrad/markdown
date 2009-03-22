@@ -256,7 +256,9 @@ method AutoLinkEmail($/) {
 }
 
 method Reference($/) {
-    make Markdown::Reference.new( );
+    my $mast := Markdown::Reference.new( );
+    $mast.insert( ~$<Label>.text(), ~$<RefSrc>.text(), ~$<RefTitle>.text());
+    make $mast
 }
 
 method Code($/) {
