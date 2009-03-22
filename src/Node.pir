@@ -48,6 +48,12 @@ for Markdown.
 
 .namespace [ 'Markdown';'Link' ]
 
+.sub 'image' :method
+    .param pmc value           :optional
+    .param int has_value       :opt_flag
+    .tailcall self.'attr'('image', value, has_value)
+.end
+
 .sub 'title' :method
     .param pmc value           :optional
     .param int has_value       :opt_flag
@@ -62,6 +68,12 @@ for Markdown.
 
 
 .namespace [ 'Markdown';'RefLink' ]
+
+.sub 'image' :method
+    .param pmc value           :optional
+    .param int has_value       :opt_flag
+    .tailcall self.'attr'('image', value, has_value)
+.end
 
 .sub 'key' :method
     .param pmc value           :optional

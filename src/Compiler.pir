@@ -223,6 +223,8 @@ Return generated HTML for all of its children.
     .param pmc node
     .local pmc code
     new code, 'CodeString'
+    $S0 = node.'image'()
+    if $S0 goto L0
     $S0 = "<a href=\""
     $S1 = node.'url'()
     $S0 .= $S1
@@ -240,6 +242,24 @@ Return generated HTML for all of its children.
     $S0 .= "</a>"
     set code, $S0
     .return (code)
+  L0:
+    $S0 = "<img src=\""
+    $S1 = node.'url'()
+    $S0 .= $S1
+    $S0 .= "\" alt=\""
+    $S1 = self.'html_children'(node)
+    $S0 .= $S1
+    $S0 .= "\" title=\""
+    $S1 = node.'title'()
+    unless $S1 goto L2
+    $I0 = length $S1
+    $I0 -= 2
+    $S1 = substr $S1, 1, $I0
+  L2:
+    $S0 .= $S1
+    $S0 .= "\" />"
+    set code, $S0
+    .return (code)
 .end
 
 =item html(Markdown::RefLink node)
@@ -254,6 +274,8 @@ Return generated HTML for all of its children.
     $S0 = downcase $S2
     $P1 = $P0[$S0]
     new code, 'CodeString'
+    $S0 = node.'image'()
+    if $S0 goto L0
     $S0 = "<a href=\""
     $S1 = $P1[0]
     $S0 .= $S1
@@ -274,6 +296,24 @@ Return generated HTML for all of its children.
   L2:
     $S0 .= $S1
     $S0 .= "</a>"
+    set code, $S0
+    .return (code)
+  L0:
+    $S0 = "<img src=\""
+    $S1 = $P1[0]
+    $S0 .= $S1
+    $S0 .= "\" alt=\""
+    $S1 = self.'html_children'(node)
+    $S0 .= $S1
+    $S0 .= "\" title=\""
+    $S1 = $P1[1]
+    unless $S1 goto L3
+    $I0 = length $S1
+    $I0 -= 2
+    $S1 = substr $S1, 1, $I0
+  L3:
+    $S0 .= $S1
+    $S0 .= "\" />"
     set code, $S0
     .return (code)
 .end

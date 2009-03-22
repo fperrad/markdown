@@ -185,6 +185,7 @@ token Inline {
     | <Space> {*}               #= Space
     | <Strong> {*}              #= Strong
     | <Emph> {*}                #= Emph
+    | <Image> {*}               #= Image
     | <Link> {*}                #= Link
     | <Code> {*}                #= Code
     | <Entity> {*}              #= Entity
@@ -288,6 +289,13 @@ token TwoUIClose { <!Spacechar> <!Newline> <Inline> '__' <!Alphanumeric> }
 token StrongUI {
     <.TwoUIOpen> [ <!TwoUIClose> <Inline> ]* <TwoUIClose>
     {*}
+}
+
+token Image {
+    '!' [
+        | <ExplicitLink> {*}    #= ExplicitLink
+        | <ReferenceLink> {*}   #= ReferenceLink
+    ]
 }
 
 token Link {

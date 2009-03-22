@@ -212,6 +212,12 @@ method StrongUI($/) {
     make $mast;
 }
 
+method Image($/, $key) {
+    my $mast := $( $/{$key} );
+    $mast.image( '1' );
+    make $mast;
+}
+
 method Link($/, $key) {
     make $( $/{$key} );
 }
