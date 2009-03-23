@@ -330,47 +330,53 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'RefLink'])
     .param pmc node
-    .local pmc code
     $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
     $S2 = node.'key'()
     $S0 = downcase $S2
     $P1 = $P0[$S0]
+    .local string url, title
+    if null $P1 goto L1
+    $S0 = $P1[0]
+    url = escape_xml($S0)
+    $S0 = $P1[1]
+    title = escape_xml($S0)
+    goto L2
+  L1:
+    printerr "unknown reference "
+    printerr $S2
+    printerr "\n"
+    url = 'no link'
+    title = ''
+  L2:
+    .local pmc code
     new code, 'CodeString'
     $S0 = node.'image'()
-    if $S0 goto L0
+    if $S0 goto L3
     $S0 = "<a href=\""
-    $S1 = $P1[0]
-    $S1 = escape_xml($S1)
-    $S0 .= $S1
-    $S1 = $P1[1]
-    unless $S1 goto L1
+    $S0 .= url
+    unless title goto L4
     $S0 .= "\" title=\""
-    $S1 = escape_xml($S1)
-    $S0 .= $S1
-  L1:
+    $S0 .= title
+  L4:
     $S0 .= "\">"
     $S1 = self.'html_children'(node)
-    if $S1 goto L2
+    if $S1 goto L5
     $I0 = length $S2
     $I0 -= 2
     $S1 = substr $S2, 1, $I0
-  L2:
+  L5:
     $S0 .= $S1
     $S0 .= "</a>"
     set code, $S0
     .return (code)
-  L0:
+  L3:
     $S0 = "<img src=\""
-    $S1 = $P1[0]
-    $S1 = escape_xml($S1)
-    $S0 .= $S1
+    $S0 .= url
     $S0 .= "\" alt=\""
     $S1 = self.'html_children'(node)
     $S0 .= $S1
     $S0 .= "\" title=\""
-    $S1 = $P1[1]
-    $S1 = escape_xml($S1)
-    $S0 .= $S1
+    $S0 .= title
     $S0 .= "\" />"
     set code, $S0
     .return (code)
