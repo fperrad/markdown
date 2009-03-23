@@ -299,6 +299,38 @@ method Space($/) {
     make Markdown::Space.new( :text( $/.text() ) );
 }
 
+method Smart($/, $key) {
+    make $( $/{$key} );
+}
+
+method Apostrophe($/) {
+#    make Markdown::Entity.new( :text( '&rsquo;' ) );
+    make Markdown::Entity.new( :text( $/.text() ) );
+}
+
+method Ellipsis($/) {
+#    make Markdown::Entity.new( :text( '&hellip;' ) );
+    make Markdown::Entity.new( :text( $/.text() ) );
+}
+
+method Dash($/, $key) {
+    make $( $/{$key} );
+}
+
+method EnDash($/) {
+#    make Markdown::Entity.new( :text( '&ndash;' ) );
+    make Markdown::Entity.new( :text( $/.text() ) );
+}
+
+method EmDash($/) {
+#    make Markdown::Entity.new( :text( '&mdash;' ) );
+    make Markdown::Entity.new( :text( $/.text() ) );
+}
+
+method DoubleQuoted($/) {
+    make Markdown::Line.new( :text( $/.text() ) );
+}
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

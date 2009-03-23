@@ -204,6 +204,7 @@ token Inline {
     | <Code> {*}                #= Code
     | <Entity> {*}              #= Entity
     | <EscapedChar> {*}         #= EscapedChar
+    | <Smart> {*}               #= Smart
     | <Symbol> {*}              #= Symbol
 }
 
@@ -494,11 +495,13 @@ token Sp { <Spacechar>* }
 
 token Spnl { <.Sp> [<.Newline> <.Sp>]? }
 
-token SpecialChar { '*' | '_' | '`' | '&' | '[' | ']' | '<' | '!' | '\\' }
+token SpecialChar { '*' | '_' | '`' | '&' | '[' | ']' | '<' | '!' | '\\' | '.' | '-' | '\'' | '"' | '^' }
 
 token NormalChar { <!SpecialChar> <!Spacechar> <!Newline> . }
 
 token Alphanumeric { \w }
+
+token Digit { \d }
 
 token HexEntity { '&#' <[Xx]> <[0..9a..fA..F]>+ ';' }
 
@@ -521,5 +524,46 @@ token RawLine {
     | (\N*) <.Newline>
     | (.+) <.Eof>
     ]
+    {*}
+}
+
+token Smart {
+    | <Ellipsis> {*}            #= Ellipsis
+    | <Dash> {*}                #= Dash
+    | <DoubleQuoted> {*}        #= DoubleQuoted
+    | <Apostrophe> {*}          #= Apostrophe
+}
+
+token Apostrophe {
+    '\''
+    {*}
+}
+
+token Ellipsis {
+    '...' | '. . .'
+    {*}
+}
+
+token Dash {
+    | <EmDash> {*}              #= EmDash
+    | <EnDash> {*}              #= EnDash
+}
+
+token EnDash {
+    '-' <!Digit>
+    {*}
+}
+
+token EmDash {
+    '---' | '--'
+    {*}
+}
+
+token DoubleQuoteStart { '"' }
+
+token DoubleQuoteEnd { '"' }
+
+token DoubleQuoted {
+    <.DoubleQuoteStart> [ <!DoubleQuoteEnd> <.Inline> ]+ <.DoubleQuoteEnd>
     {*}
 }

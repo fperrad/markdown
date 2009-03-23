@@ -41,7 +41,7 @@ CODE
 
 OUT
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference link simple', todo => 'bug with quoted ref' );
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference link simple' );
 
 Or you can use a [shortcut][] reference, which links the text "shortcut"
 to the link named "[shortcut]" on the next paragraph.
