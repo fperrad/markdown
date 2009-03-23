@@ -19,6 +19,7 @@ for Markdown.
 
     p6meta.'new_class'('Markdown::BlockQuote', 'parent'=>base)
     p6meta.'new_class'('Markdown::Code', 'parent'=>base)
+    p6meta.'new_class'('Markdown::CodeBlock', 'parent'=>base)
     p6meta.'new_class'('Markdown::Document', 'parent'=>base)
     p6meta.'new_class'('Markdown::Emphasis', 'parent'=>base)
     p6meta.'new_class'('Markdown::Email', 'parent'=>base)

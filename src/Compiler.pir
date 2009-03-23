@@ -72,6 +72,30 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     .return ($S0)
 .end
 
+.sub 'detab' :anon
+    .param string str
+    $P0 = split "\n", str
+    $P1 = new 'ResizableStringArray'
+  L1:
+    unless $P0 goto L2
+    $S0 = shift $P0
+    $S1 = substr $S0, 0, 1
+    unless $S1 == "\t" goto L3
+    $S0 = substr $S0, 1
+    goto L4
+  L3:
+    $S1 = substr $S0, 0, 4
+    unless $S1 == '    ' goto L4
+    $S0 = substr $S0, 4
+  L4:
+    push $P1, $S0
+    goto L1
+  L2:
+    str = join "\n", $P1
+    .return (str)
+.end
+
+
 =item html_children(node)
 
 Return generated HTML for all of its children.
@@ -162,6 +186,24 @@ Return generated HTML for all of its children.
     $S0 = "<p>"
     $S0 .= $S1
     $S0 .= "</p>\n\n"
+    set code, $S0
+    .return (code)
+.end
+
+=item html(Markdown::CodeBlock node)
+
+=cut
+
+.sub 'html' :method :multi(_,['Markdown';'CodeBlock'])
+    .param pmc node
+    $S1 = node.'text'()
+    $S1 = detab($S1)
+    $S1 = escape_code($S1)
+    .local pmc code
+    new code, 'CodeString'
+    $S0 = "<pre><code>"
+    $S0 .= $S1
+    $S0 .= "</code></pre>\n\n"
     set code, $S0
     .return (code)
 .end

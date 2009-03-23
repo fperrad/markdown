@@ -103,6 +103,10 @@ method RawLine($/) {
     make Markdown::Line.new( :text( $/[0] ) );
 }
 
+method Verbatim($/) {
+    make Markdown::CodeBlock.new( :text( $/.text() ) );
+}
+
 method HorizontalRule($/) {
     make Markdown::HorizontalRule.new();
 }

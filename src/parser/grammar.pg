@@ -19,6 +19,7 @@ token TOP {
 token Block {
     <.BlankLine>* [
         | <BlockQuote> {*}      #= BlockQuote
+        | <Verbatim> {*}        #= Verbatim
         | <Reference> {*}       #= Reference
         | <HorizontalRule> {*}  #= HorizontalRule
         | <Heading> {*}         #= Heading
@@ -83,6 +84,19 @@ token BlockQuoteRaw {
 }
 
 token _Chevron { '>' }
+
+token NonblankIndentedLine {
+    <!BlankLine> <.IndentedLine>
+}
+
+token VerbatimChunk {
+    <.BlankLine>* <.NonblankIndentedLine>+
+}
+
+token Verbatim {
+    <.VerbatimChunk>+
+    {*}
+}
 
 token HorizontalRule {
     <.NonindentSpace> [
