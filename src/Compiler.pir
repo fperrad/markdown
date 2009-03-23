@@ -288,40 +288,55 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'Link'])
     .param pmc node
+    .local string url, title, content, image
+    url = node.'url'()
+    title = node.'title'()
+    content = self.'html_children'(node)
+    image = node.'image'()
+    if image goto L1
+    $S0 = _link(url, title, content)
+    goto L2
+  L1:
+    $S0 = _image(url, title, content)
+  L2:
     .local pmc code
     new code, 'CodeString'
-    $S0 = node.'image'()
-    if $S0 goto L0
+    set code, $S0
+    .return (code)
+.end
+
+.sub '_link' :anon
+    .param string url
+    .param string title
+    .param string content
     $S0 = "<a href=\""
-    $S1 = node.'url'()
-    $S1 = escape_xml($S1)
+    $S1 = escape_xml(url)
     $S0 .= $S1
-    $S1 = node.'title'()
-    unless $S1 goto L1
+    unless title goto L1
     $S0 .= "\" title=\""
-    $S1 = escape_xml($S1)
+    $S1 = escape_xml(title)
     $S0 .= $S1
   L1:
     $S0 .= "\">"
-    $S1 = self.'html_children'(node)
-    $S0 .= $S1
+    $S0 .= content
     $S0 .= "</a>"
-    set code, $S0
-    .return (code)
-  L0:
+    .return ($S0)
+.end
+
+.sub '_image' :anon
+    .param string url
+    .param string title
+    .param string content
     $S0 = "<img src=\""
-    $S1 = node.'url'()
+    $S1 = escape_xml(url)
     $S0 .= $S1
     $S0 .= "\" alt=\""
-    $S1 = self.'html_children'(node)
-    $S0 .= $S1
+    $S0 .= content
     $S0 .= "\" title=\""
-    $S1 = node.'title'()
-    $S1 = escape_xml($S1)
+    $S1 = escape_xml(title)
     $S0 .= $S1
     $S0 .= "\" />"
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::RefLink node)
@@ -348,36 +363,22 @@ Return generated HTML for all of its children.
     url = 'no link'
     title = ''
   L2:
-    .local pmc code
-    new code, 'CodeString'
-    $S0 = node.'image'()
-    if $S0 goto L3
-    $S0 = "<a href=\""
-    $S0 .= url
-    unless title goto L4
-    $S0 .= "\" title=\""
-    $S0 .= title
-  L4:
-    $S0 .= "\">"
-    $S1 = self.'html_children'(node)
-    if $S1 goto L5
+    .local string content, image
+    content = self.'html_children'(node)
+    image = node.'image'()
+    if image goto L3
+    if content goto L4
     $I0 = length $S2
     $I0 -= 2
-    $S1 = substr $S2, 1, $I0
-  L5:
-    $S0 .= $S1
-    $S0 .= "</a>"
-    set code, $S0
-    .return (code)
+    content = substr $S2, 1, $I0
+  L4:
+    $S0 = _link(url, title, content)
+    goto L5
   L3:
-    $S0 = "<img src=\""
-    $S0 .= url
-    $S0 .= "\" alt=\""
-    $S1 = self.'html_children'(node)
-    $S0 .= $S1
-    $S0 .= "\" title=\""
-    $S0 .= title
-    $S0 .= "\" />"
+    $S0 = _image(url, title, content)
+  L5:
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
