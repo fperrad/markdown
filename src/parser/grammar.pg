@@ -540,7 +540,7 @@ token Apostrophe {
 }
 
 token Ellipsis {
-    '...' | '. . .'
+    [ '...' | '. . .' ]
     {*}
 }
 
@@ -555,7 +555,7 @@ token EnDash {
 }
 
 token EmDash {
-    '---' | '--'
+    [ '---' | '--' ]
     {*}
 }
 

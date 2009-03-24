@@ -46,6 +46,7 @@ SOURCES := \
   markdown.pir
 
 BUILTINS_PIR := \
+  src/builtins/is_strict.pir \
   src/builtins/length.pir
 
 DOCS := README

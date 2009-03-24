@@ -34,12 +34,14 @@ else {
     plan skip_all => 'no MarkdownTest';
 }
 
+$ENV{MARKDOWN_STRICT} = 'NO_EXT';
+
 foreach my $test_file (@test_files) {
     my $test_name = basename($test_file, '.text');
 
-    my $code = Parrot::Test::slurp_file( $test_file );
-    my $out = Parrot::Test::slurp_file(File::Spec->catfile( @dir, "$test_name.html" ));
-    language_output_is( 'markdown', $code, $out, $test_name, todo => 'not implemented' );
+    my $code = Parrot::Test::slurp_file( $test_file ) . "\n";
+    my $out = Parrot::Test::slurp_file(File::Spec->catfile( @dir, "$test_name.html" )) . "\n";
+    language_output_is( 'markdown', $code, $out, $test_name );
 }
 
 

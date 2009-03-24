@@ -306,13 +306,21 @@ method Smart($/, $key) {
 }
 
 method Apostrophe($/) {
-#    make Markdown::Entity.new( :text( '&rsquo;' ) );
-    make Markdown::Entity.new( :text( $/.text() ) );
+#    if ( $/.is_strict() ) {
+        make Markdown::Word.new( :text( $/.text() ) );
+#    }
+#    else {
+#        make Markdown::Entity.new( :text( '&rsquo;' ) );
+#    }
 }
 
 method Ellipsis($/) {
-#    make Markdown::Entity.new( :text( '&hellip;' ) );
-    make Markdown::Entity.new( :text( $/.text() ) );
+    if ( $/.is_strict() ) {
+        make Markdown::Word.new( :text( $/.text() ) );
+    }
+    else {
+        make Markdown::Entity.new( :text( '&hellip;' ) );
+    }
 }
 
 method Dash($/, $key) {
@@ -320,13 +328,21 @@ method Dash($/, $key) {
 }
 
 method EnDash($/) {
-#    make Markdown::Entity.new( :text( '&ndash;' ) );
-    make Markdown::Entity.new( :text( $/.text() ) );
+#    if ( $/.is_strict() ) {
+        make Markdown::Word.new( :text( $/.text() ) );
+#    }
+#    else {
+#        make Markdown::Entity.new( :text( '&ndash;' ) );
+#    }
 }
 
 method EmDash($/) {
-#    make Markdown::Entity.new( :text( '&mdash;' ) );
-    make Markdown::Entity.new( :text( $/.text() ) );
+    if ( $/.is_strict() ) {
+        make Markdown::Word.new( :text( $/.text() ) );
+    }
+    else {
+        make Markdown::Entity.new( :text( '&mdash;' ) );
+    }
 }
 
 method DoubleQuoted($/) {
