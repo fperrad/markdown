@@ -15,7 +15,7 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
 
-use Parrot::Test tests => 3;
+use Parrot::Test tests => 4;
 use Test::More;
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference link double' );
@@ -51,6 +51,17 @@ to the link named "[shortcut]" on the next paragraph.
 CODE
 <p>Or you can use a <a href="http://goes/with/the/link/name/text">shortcut</a> reference, which links the text "shortcut"
 to the link named "[shortcut]" on the next paragraph.</p>
+
+OUT
+
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'pathologic label reference link' );
+
+With [embedded [brackets]] [b].
+
+[b]: /url/
+
+CODE
+<p>With <a href="/url/">embedded [brackets]</a>.</p>
 
 OUT
 

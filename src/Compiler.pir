@@ -345,32 +345,30 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'RefLink'])
     .param pmc node
+    .local string content, image, key
+    content = self.'html_children'(node)
+    key = node.'key'()
     $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
-    $S2 = node.'key'()
-    $S0 = downcase $S2
+    $S0 = downcase key
     $P1 = $P0[$S0]
-    .local string url, title
     if null $P1 goto L1
+    .local string url, title
     $S0 = $P1[0]
     url = escape_xml($S0)
     $S0 = $P1[1]
     title = escape_xml($S0)
     goto L2
   L1:
-    printerr "unknown reference "
-    printerr $S2
-    printerr "\n"
-    url = 'no link'
-    title = ''
+    $S0 = key
+    $S0 .= content
+    goto L5
   L2:
-    .local string content, image
-    content = self.'html_children'(node)
     image = node.'image'()
     if image goto L3
     if content goto L4
-    $I0 = length $S2
+    $I0 = length key
     $I0 -= 2
-    content = substr $S2, 1, $I0
+    content = substr key, 1, $I0
   L4:
     $S0 = _link(url, title, content)
     goto L5
