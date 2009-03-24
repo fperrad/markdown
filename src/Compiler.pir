@@ -352,10 +352,8 @@ Return generated HTML for all of its children.
     $P1 = $P0[$S0]
     if null $P1 goto L1
     .local string url, title
-    $S0 = $P1[0]
-    url = escape_xml($S0)
-    $S0 = $P1[1]
-    title = escape_xml($S0)
+    url = $P1[0]
+    title = $P1[1]
     goto L2
   L1:
     $S0 = node.'text'()
