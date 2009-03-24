@@ -231,7 +231,8 @@ method ReferenceLink($/, $key) {
 }
 
 method ReferenceLinkDouble($/) {
-    my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].text() ) );
+    my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].text() ),
+                                       :text( $/.text() ) );
     for $<Label>[0]<Inline> {
         $mast.push( $( $_ ) );
     }
@@ -239,7 +240,8 @@ method ReferenceLinkDouble($/) {
 }
 
 method ReferenceLinkSingle($/) {
-    make Markdown::RefLink.new( :key( ~$<Label>.text() ) );
+    make Markdown::RefLink.new( :key( ~$<Label>.text() ),
+                                :text( $/.text() ) );
 }
 
 method ExplicitLink($/) {

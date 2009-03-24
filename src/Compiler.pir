@@ -345,8 +345,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'RefLink'])
     .param pmc node
-    .local string content, image, key
-    content = self.'html_children'(node)
+    .local string key
     key = node.'key'()
     $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
     $S0 = downcase key
@@ -359,10 +358,11 @@ Return generated HTML for all of its children.
     title = escape_xml($S0)
     goto L2
   L1:
-    $S0 = key
-    $S0 .= content
+    $S0 = node.'text'()
     goto L5
   L2:
+    .local string content, image
+    content = self.'html_children'(node)
     image = node.'image'()
     if image goto L3
     if content goto L4
