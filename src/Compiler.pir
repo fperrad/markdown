@@ -39,12 +39,17 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     .return (str)
 .end
 
+.sub 'escape_attr' :anon
+    .param string str
+    str = escape_xml(str)
+    $P0 = split '"', str
+    str = join '&quot;', $P0
+    .return (str)
+.end
+
 .sub 'escape_code' :anon
     .param string str
-    $P0 = split '&', str
-    str = join '&amp;', $P0
-    $P0 = split '<', str
-    str = join '&lt;', $P0
+    str = escape_xml(str)
     $P0 = split '>', str
     str = join '&gt;', $P0
     .return (str)
@@ -310,11 +315,11 @@ Return generated HTML for all of its children.
     .param string title
     .param string content
     $S0 = "<a href=\""
-    $S1 = escape_xml(url)
+    $S1 = escape_attr(url)
     $S0 .= $S1
     unless title goto L1
     $S0 .= "\" title=\""
-    $S1 = escape_xml(title)
+    $S1 = escape_attr(title)
     $S0 .= $S1
   L1:
     $S0 .= "\">"
@@ -328,12 +333,12 @@ Return generated HTML for all of its children.
     .param string title
     .param string content
     $S0 = "<img src=\""
-    $S1 = escape_xml(url)
+    $S1 = escape_attr(url)
     $S0 .= $S1
     $S0 .= "\" alt=\""
     $S0 .= content
     $S0 .= "\" title=\""
-    $S1 = escape_xml(title)
+    $S1 = escape_attr(title)
     $S0 .= $S1
     $S0 .= "\" />"
     .return ($S0)
