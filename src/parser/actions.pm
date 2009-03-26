@@ -96,11 +96,7 @@ method BlockQuoteRaw($/) {
 }
 
 method Line($/) {
-    make $( $<RawLine> );
-}
-
-method RawLine($/) {
-    make Markdown::Line.new( :text( $/[0] ) );
+    make Markdown::Line.new( :text( ~$<RawLine>[0] ) );
 }
 
 method BlankLine($/) {
