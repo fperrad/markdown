@@ -103,8 +103,31 @@ method RawLine($/) {
     make Markdown::Line.new( :text( $/[0] ) );
 }
 
+method BlankLine($/) {
+    make Markdown::Line.new( :text( $/.text() ) );
+}
+
+method NonblankIndentedLine($/) {
+    make Markdown::Line.new( :text( ~$<IndentedLine><Line><RawLine>.text() ) );
+}
+
+method VerbatimChunk($/) {
+    my $mast := Markdown::Node.new();
+    for $<BlankLine> {
+        $mast.push( $( $_ ) );
+    }
+    for $<NonblankIndentedLine> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
+}
+
 method Verbatim($/) {
-    make Markdown::CodeBlock.new( :text( $/.text() ) );
+    my $mast := Markdown::CodeBlock.new();
+    for $<VerbatimChunk> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
 }
 
 method HorizontalRule($/) {

@@ -49,7 +49,6 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
 
 .sub 'escape_code' :anon
     .param string str
-    str = escape_xml(str)
     $P0 = split '>', str
     str = join '&gt;', $P0
     .return (str)
@@ -75,29 +74,6 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     goto L1
   L2:
     .return ($S0)
-.end
-
-.sub 'detab' :anon
-    .param string str
-    $P0 = split "\n", str
-    $P1 = new 'ResizableStringArray'
-  L1:
-    unless $P0 goto L2
-    $S0 = shift $P0
-    $S1 = substr $S0, 0, 1
-    unless $S1 == "\t" goto L3
-    $S0 = substr $S0, 1
-    goto L4
-  L3:
-    $S1 = substr $S0, 0, 4
-    unless $S1 == '    ' goto L4
-    $S0 = substr $S0, 4
-  L4:
-    push $P1, $S0
-    goto L1
-  L2:
-    str = join "\n", $P1
-    .return (str)
 .end
 
 
@@ -201,8 +177,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'CodeBlock'])
     .param pmc node
-    $S1 = node.'text'()
-    $S1 = detab($S1)
+    $S1 = self.'html_children'(node)
     $S1 = escape_code($S1)
     .local pmc code
     new code, 'CodeString'
@@ -458,6 +433,7 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Code'])
     .param pmc node
     $S1 = node.'text'()
+    $S1 = escape_xml($S1)
     $S1 = escape_code($S1)
     .local pmc code
     new code, 'CodeString'

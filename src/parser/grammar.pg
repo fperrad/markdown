@@ -86,15 +86,17 @@ token BlockQuoteRaw {
 token _Chevron { '>' }
 
 token NonblankIndentedLine {
-    <!BlankLine> <.IndentedLine>
+    <!BlankLine> <IndentedLine>
+    {*}
 }
 
 token VerbatimChunk {
-    <.BlankLine>* <.NonblankIndentedLine>+
+    <BlankLine>* <NonblankIndentedLine>+
+    {*}
 }
 
 token Verbatim {
-    <.VerbatimChunk>+
+    <VerbatimChunk>+
     {*}
 }
 
@@ -481,7 +483,7 @@ token _Code5 {
     ]+
 }
 
-token BlankLine { <.Sp> <.Newline> }
+token BlankLine { <.Sp> <.Newline> {*} }
 
 token Eof { $ }
 
