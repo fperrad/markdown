@@ -84,12 +84,16 @@ method SetextHeading2($/) {
 }
 
 method BlockQuote($/) {
-    make $( $<BlockQuoteRaw> );
+    my $mast := Markdown::BlockQuote.new();
+    for $<BlockQuoteRaw> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
 }
 
 method BlockQuoteRaw($/) {
-    my $mast := Markdown::BlockQuote.new();
-    for $<Line> {
+    my $mast := Markdown::Node.new();
+    for $<Inline> {
         $mast.push( $( $_ ) );
     }
     make $mast;
@@ -164,7 +168,11 @@ method ListItem($/) {
 }
 
 method ListBlock($/) {
-    make $( $<Line> );
+    my $mast := Markdown::Node.new();
+    for $<Inline> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
 }
 
 method OrderedList($/, $key) {

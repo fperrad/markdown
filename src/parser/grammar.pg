@@ -70,16 +70,16 @@ token Heading {
 }
 
 token BlockQuote {
-    <BlockQuoteRaw>
+    <BlockQuoteRaw>+
     {*}
 }
 
 token BlockQuoteRaw {
     [
-        <._Chevron> ' '? <Line>
-        [ <!_Chevron> <!BlankLine> <Line> ]*
+        <._Chevron> ' '? <Inline>+
+        [ <!_Chevron> <!BlankLine> <Inline>+ ]*
         <.BlankLine>*
-    ]+
+    ]
     {*}
 }
 
@@ -142,7 +142,7 @@ token ListItem {
 }
 
 token ListBlock {
-    <Line> <ListBlockLine>*
+    <Inline>+ <ListBlockLine>*
     {*}
 }
 
