@@ -445,41 +445,41 @@ token _Sp_Ticks5 { <Sp> <Ticks5> }
 
 token _Code1 {
     [
-        | [ <!Ticks1> <Nonspacechar> ]+
+        | [ <!Ticks1> <.Nonspacechar> ]+
         | <!Ticks1> '`'+
-        | <!_Sp_Ticks1> [ <Spacechar> | <Newline> <!BlankLine> ]
+        | <!_Sp_Ticks1> [ <.Spacechar> | <.Newline> <!BlankLine> ]
     ]
 }
 
 token _Code2 {
     [
-        [ <!Ticks2> <Nonspacechar> ]+
+        [ <!Ticks2> <.Nonspacechar> ]+
         | <!Ticks2> '`'+
-        | <!_Sp_Ticks2> [ <Spacechar> | <Newline> <!BlankLine> ]
+        | <!_Sp_Ticks2> [ <.Spacechar> | <.Newline> <!BlankLine> ]
     ]+
 }
 
 token _Code3 {
     [
-        [ <!Ticks3> <Nonspacechar> ]+
+        [ <!Ticks3> <.Nonspacechar> ]+
         | <!Ticks3> '`'+
-        | <!_Sp_Ticks3> [ <Spacechar> | <Newline> <!BlankLine> ]
+        | <!_Sp_Ticks3> [ <.Spacechar> | <.Newline> <!BlankLine> ]
     ]+
 }
 
 token _Code4 {
     [
-        [ <!Ticks4> <Nonspacechar> ]+
+        [ <!Ticks4> <.Nonspacechar> ]+
         | <!Ticks4> '`'+
-        | <!_Sp_Ticks4> [ <Spacechar> | <Newline> <!BlankLine> ]
+        | <!_Sp_Ticks4> [ <.Spacechar> | <.Newline> <!BlankLine> ]
     ]+
 }
 
 token _Code5 {
     [
-        [ <!Ticks5> <Nonspacechar> ]+
+        [ <!Ticks5> <.Nonspacechar> ]+
         | <!Ticks5> '`'+
-        | <!_Sp_Ticks5> [ <Spacechar> | <Newline> <!BlankLine> ]
+        | <!_Sp_Ticks5> [ <.Spacechar> | <.Newline> <!BlankLine> ]
     ]+
 }
 
