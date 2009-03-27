@@ -278,7 +278,7 @@ token EmphStar {
 
 token OneUIOpen { <!UILine> '_' <!Spacechar> <!Newline> }
 
-token OneUIClose { <!Spacechar> <!Newline> <Inline> <!StrongUI> '_' <!Alphanumeric> }
+token OneUIClose { <!Spacechar> <!Newline> <Inline> <!StrongUI> '_' }
 
 token EmphUI {
     <.OneUIOpen> [ <!OneUIClose> <Inline> ]* <OneUIClose>
@@ -301,7 +301,7 @@ token StrongStar {
 
 token TwoUIOpen { <!UILine> '__' <!Spacechar> <!Newline> }
 
-token TwoUIClose { <!Spacechar> <!Newline> <Inline> '__' <!Alphanumeric> }
+token TwoUIClose { <!Spacechar> <!Newline> <Inline> '__' }
 
 token StrongUI {
     <.TwoUIOpen> [ <!TwoUIClose> <Inline> ]* <TwoUIClose>
