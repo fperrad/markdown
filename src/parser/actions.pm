@@ -139,7 +139,8 @@ method BlankLine($/) {
 }
 
 method NonblankIndentedLine($/) {
-    make Markdown::Line.new( :text( ~$<IndentedLine><Line><RawLine>.text() ) );
+    make Markdown::Line.new( :text( ~$<IndentedLine><Line><RawLine>.text() ),
+                             :detab( 1 ) );
 }
 
 method VerbatimChunk($/) {

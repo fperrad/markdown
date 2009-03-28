@@ -48,6 +48,15 @@ for Markdown.
 .end
 
 
+.namespace ['Markdown'; 'Line']
+
+.sub 'detab' :method
+    .param pmc value           :optional
+    .param int has_value       :opt_flag
+    .tailcall self.'attr'('detab', value, has_value)
+.end
+
+
 .namespace ['Markdown'; 'Link']
 
 .sub 'image' :method
