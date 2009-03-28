@@ -197,20 +197,22 @@ Return generated HTML for all of its children.
     .local pmc code
     new code, 'CodeString'
     $S0 = "<blockquote>\n"
-    set code, $S0
+    $S0 .= "  "
     .local pmc iter
     iter = node.'iterator'()
   iter_loop:
     unless iter goto iter_end
     .local pmc cpast
     cpast = shift iter
-    $P0 = self.'html'(cpast)
-    code .= "  <p>"
-    code .= $P0
-    code .= "</p>\n"
+    $S1 = self.'html'(cpast)
+    $S0 .= $S1
     goto iter_loop
   iter_end:
-    code .= "</blockquote>\n\n"
+    $I0 = length $S0
+    dec $I0
+    $S0 = substr $S0, 0, $I0
+    $S0 .= "</blockquote>\n\n"
+    set code, $S0
     .return (code)
 .end
 

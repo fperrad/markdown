@@ -85,13 +85,44 @@ method SetextHeading2($/) {
 
 method BlockQuote($/) {
     my $mast := Markdown::BlockQuote.new();
-    for $<BlockQuoteRaw> {
+    for $<BlockQuoteChunk> {
         $mast.push( $( $_ ) );
     }
     make $mast;
 }
 
-method BlockQuoteRaw($/) {
+method BlockQuoteChunk($/) {
+    my $mast := Markdown::Para.new();
+    my $first := 1;
+    for $<BlockQuoteLine> {
+        unless ( $first ) {
+            $mast.push( Markdown::Word.new( :text( "\n" ) ) );
+        }
+        $mast.push( $( $_ ) );
+        $first := 0;
+    }
+    make $mast;
+}
+
+method BlockQuoteLine($/) {
+    my $mast := Markdown::Node.new();
+    $mast.push( $( $<BlockQuoteFirstLine> ) );
+    for $<BlockQuoteNextLine> {
+        $mast.push( Markdown::Word.new( :text( "\n" ) ) );
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
+}
+
+method BlockQuoteFirstLine($/) {
+    my $mast := Markdown::Node.new();
+    for $<Inline> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
+}
+
+method BlockQuoteNextLine($/) {
     my $mast := Markdown::Node.new();
     for $<Inline> {
         $mast.push( $( $_ ) );

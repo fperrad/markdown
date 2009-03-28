@@ -70,16 +70,27 @@ token Heading {
 }
 
 token BlockQuote {
-    <BlockQuoteRaw>+
+    [ <BlockQuoteChunk> <.BlankLine>* ]+
     {*}
 }
 
-token BlockQuoteRaw {
-    [
-        <._Chevron> ' '? <Inline>+
-        [ <!_Chevron> <!BlankLine> <Inline>+ ]*
-        <.BlankLine>*
-    ]
+token BlockQuoteChunk {
+    <BlockQuoteLine>+
+    {*}
+}
+
+token BlockQuoteLine {
+    <BlockQuoteFirstLine> <BlockQuoteNextLine>*
+    {*}
+}
+
+token BlockQuoteFirstLine {
+    <._Chevron> ' '? <Inline>+ <Newline>
+    {*}
+}
+
+token BlockQuoteNextLine {
+    <!_Chevron> <!BlankLine> <Inline>+ <Newline>
     {*}
 }
 
