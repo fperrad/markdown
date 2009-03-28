@@ -85,6 +85,8 @@ Return generated HTML for all of its children.
 
 .sub 'html_children' :method
     .param pmc node
+    .param string sep  :optional
+    .param int has_sep :opt_flag
     .local pmc code, iter
     code = new 'CodeString'
     iter = node.'iterator'()
@@ -93,7 +95,12 @@ Return generated HTML for all of its children.
     .local pmc cpast
     cpast = shift iter
     $P0 = self.'html'(cpast)
+    $I0 = elements $P0
+    unless $I0 goto iter_loop
     code .= $P0
+    unless has_sep goto L1
+    code .= sep
+  L1:
     goto iter_loop
   iter_end:
     .return (code)
@@ -116,7 +123,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Document'])
     .param pmc node
-    .tailcall self.'html_children'(node)
+    .tailcall self.'html_children'(node, "\n\n")
 .end
 
 
@@ -128,7 +135,7 @@ Return generated HTML for all of its children.
     .param pmc node
     .local pmc code
     new code, 'CodeString'
-    set code, "<hr />\n\n"
+    set code, "<hr />"
     .return (code)
 .end
 
@@ -147,7 +154,7 @@ Return generated HTML for all of its children.
     $S0 .= $S1
     $S0 .= "</h"
     $S0 .= $S2
-    $S0 .= ">\n\n"
+    $S0 .= ">"
     .local pmc code
     new code, 'CodeString'
     set code, $S0
@@ -164,7 +171,7 @@ Return generated HTML for all of its children.
     $S1 = self.'html_children'(node)
     $S0 = "<p>"
     $S0 .= $S1
-    $S0 .= "</p>\n\n"
+    $S0 .= "</p>"
     .local pmc code
     new code, 'CodeString'
     set code, $S0
@@ -181,7 +188,7 @@ Return generated HTML for all of its children.
     $S1 = escape_code($S1)
     $S0 = "<pre><code>"
     $S0 .= $S1
-    $S0 .= "</code></pre>\n\n"
+    $S0 .= "</code></pre>"
     .local pmc code
     new code, 'CodeString'
     set code, $S0
@@ -196,20 +203,12 @@ Return generated HTML for all of its children.
     .param pmc node
     $S0 = "<blockquote>\n"
     $S0 .= "  "
-    .local pmc iter
-    iter = node.'iterator'()
-  iter_loop:
-    unless iter goto iter_end
-    .local pmc cpast
-    cpast = shift iter
-    $S1 = self.'html'(cpast)
-    $S0 .= $S1
-    goto iter_loop
-  iter_end:
-    $I0 = length $S0
+    $S1 = self.'html_children'(node, "\n\n")
+    $I0 = length $S1
     dec $I0
-    $S0 = substr $S0, 0, $I0
-    $S0 .= "</blockquote>\n\n"
+    $S1 = substr $S1, 0, $I0
+    $S0 .= $S1
+    $S0 .= "</blockquote>"
     .local pmc code
     new code, 'CodeString'
     set code, $S0
@@ -225,7 +224,7 @@ Return generated HTML for all of its children.
     $S1 = self.'html_children'(node)
     $S0 = "<ul>\n"
     $S0 .= $S1
-    $S0 .= "</ul>\n\n"
+    $S0 .= "</ul>"
     .local pmc code
     new code, 'CodeString'
     set code, $S0
@@ -241,7 +240,7 @@ Return generated HTML for all of its children.
     $S1 = self.'html_children'(node)
     $S0 = "<ol>\n"
     $S0 .= $S1
-    $S0 .= "</ol>\n\n"
+    $S0 .= "</ol>"
     .local pmc code
     new code, 'CodeString'
     set code, $S0
