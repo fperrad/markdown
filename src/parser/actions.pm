@@ -190,17 +190,30 @@ method BulletListItem($/) {
 }
 
 method ListItem($/) {
-    my $mast := Markdown::ListItem.new();
-    $mast.push( $( $<ListBlock> ) );
-    for $<ListContinuationBlock> {
-        $mast.push( $( $_ ) );
+    if ( $<ListContinuationBlock> ) {
+        my $mast := Markdown::Para.new( $( $<ListBlock> ) );
+        for $<ListContinuationBlock> {
+            $mast.push( $( $_ ) );
+        }
+        make Markdown::ListItem.new( $mast );
     }
-    make $mast;
+    else {
+        make Markdown::ListItem.new( $( $<ListBlock> ) );
+    }
 }
 
 method ListBlock($/) {
     my $mast := Markdown::Node.new();
     for $<Inline> {
+        $mast.push( $( $_ ) );
+    }
+    make $mast;
+}
+
+method ListContinuationBlock($/) {
+    my $mast := Markdown::Node.new();
+    for $<ListBlock> {
+        $mast.push( Markdown::Word.new( :text( "\n" ) ) );
         $mast.push( $( $_ ) );
     }
     make $mast;
