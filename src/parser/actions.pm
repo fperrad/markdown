@@ -96,7 +96,7 @@ method BlockQuoteChunk($/) {
     my $first := 1;
     for $<BlockQuoteLine> {
         unless ( $first ) {
-            $mast.push( Markdown::Word.new( :text( "\n" ) ) );
+            $mast.push( Markdown::Newline.new() );
         }
         $mast.push( $( $_ ) );
         $first := 0;
@@ -108,7 +108,7 @@ method BlockQuoteLine($/) {
     my $mast := Markdown::Node.new();
     $mast.push( $( $<BlockQuoteFirstLine> ) );
     for $<BlockQuoteNextLine> {
-        $mast.push( Markdown::Word.new( :text( "\n" ) ) );
+        $mast.push( Markdown::Newline.new() );
         $mast.push( $( $_ ) );
     }
     make $mast;
@@ -135,7 +135,7 @@ method Line($/) {
 }
 
 method BlankLine($/) {
-    make Markdown::Line.new( :text( $/.text() ) );
+    make Markdown::Newline.new( :text( $/.text() ) );
 }
 
 method NonblankIndentedLine($/) {
@@ -213,7 +213,7 @@ method ListBlock($/) {
 method ListContinuationBlock($/) {
     my $mast := Markdown::Node.new();
     for $<ListBlock> {
-        $mast.push( Markdown::Word.new( :text( "\n" ) ) );
+        $mast.push( Markdown::Newline.new() );
         $mast.push( $( $_ ) );
     }
     make $mast;

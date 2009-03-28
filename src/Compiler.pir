@@ -498,6 +498,18 @@ Return generated HTML for all of its children.
     .return (code)
 .end
 
+=item html(Markdown::Newline node)
+
+=cut
+
+.sub 'html' :method :multi(_, ['Markdown'; 'Newline'])
+    .param pmc node
+    .local pmc code
+    new code, 'CodeString'
+    set code, "\n"
+    .return (code)
+.end
+
 =back
 
 =cut

@@ -29,6 +29,7 @@ for Markdown.
     p6meta.'new_class'('Markdown::Line', 'parent'=>base)
     p6meta.'new_class'('Markdown::Link', 'parent'=>base)
     p6meta.'new_class'('Markdown::ListItem', 'parent'=>base)
+    p6meta.'new_class'('Markdown::Newline', 'parent'=>base)
     p6meta.'new_class'('Markdown::OrderedList', 'parent'=>base)
     p6meta.'new_class'('Markdown::Para', 'parent'=>base)
     p6meta.'new_class'('Markdown::RefLink', 'parent'=>base)
