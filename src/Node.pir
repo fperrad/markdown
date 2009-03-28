@@ -10,7 +10,7 @@ for Markdown.
 
 =cut
 
-.namespace [ 'Markdown';'Node' ]
+.namespace ['Markdown'; 'Node']
 
 .sub 'onload' :anon :load :init
     .local pmc p6meta, base
@@ -47,7 +47,7 @@ for Markdown.
 .end
 
 
-.namespace [ 'Markdown';'Link' ]
+.namespace ['Markdown'; 'Link']
 
 .sub 'image' :method
     .param pmc value           :optional
@@ -68,7 +68,7 @@ for Markdown.
 .end
 
 
-.namespace [ 'Markdown';'RefLink' ]
+.namespace ['Markdown'; 'RefLink']
 
 .sub 'image' :method
     .param pmc value           :optional
@@ -83,13 +83,13 @@ for Markdown.
 .end
 
 
-.namespace [ 'Markdown';'Reference' ]
+.namespace ['Markdown'; 'Reference']
 
 .sub 'insert' :method
     .param string key
     .param string url
     .param string title
-    $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
+    $P0 = get_hll_global ['Markdown'; 'HTML'; 'Compiler'], '%ref'
     $P1 = new 'FixedStringArray'
     set $P1, 2
     $P1[0] = url
@@ -99,7 +99,7 @@ for Markdown.
 .end
 
 
-.namespace [ 'Markdown';'Title' ]
+.namespace ['Markdown'; 'Title']
 
 .sub 'level' :method
     .param pmc value           :optional

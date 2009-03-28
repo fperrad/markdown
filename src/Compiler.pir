@@ -13,14 +13,14 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
 
 =cut
 
-.namespace [ 'Markdown';'HTML';'Compiler' ]
+.namespace ['Markdown'; 'HTML'; 'Compiler']
 
 .sub '__onload' :anon :load :init
     $P0 = get_hll_global 'P6metaclass'
     $P0 = $P0.'new_class'('Markdown::HTML::Compiler')
 
     $P0 = new 'Hash'
-    set_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref', $P0
+    set_hll_global ['Markdown'; 'HTML'; 'Compiler'], '%ref', $P0
 .end
 
 .sub 'to_html' :method
@@ -104,7 +104,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,_)
+.sub 'html' :method :multi(_, _)
     .param pmc node
     .tailcall self.'html_children'(node)
 .end
@@ -114,7 +114,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Document'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Document'])
     .param pmc node
     .tailcall self.'html_children'(node)
 .end
@@ -124,7 +124,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'HorizontalRule'])
+.sub 'html' :method :multi(_, ['Markdown'; 'HorizontalRule'])
     .param pmc node
     .local pmc code
     new code, 'CodeString'
@@ -137,7 +137,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Title'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Title'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S2 = node.'level'()
@@ -159,7 +159,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Para'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Para'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S0 = "<p>"
@@ -175,7 +175,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'CodeBlock'])
+.sub 'html' :method :multi(_, ['Markdown'; 'CodeBlock'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S1 = escape_code($S1)
@@ -192,7 +192,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'BlockQuote'])
+.sub 'html' :method :multi(_, ['Markdown'; 'BlockQuote'])
     .param pmc node
     $S0 = "<blockquote>\n"
     $S0 .= "  "
@@ -220,7 +220,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'ItemizedList'])
+.sub 'html' :method :multi(_, ['Markdown'; 'ItemizedList'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S0 = "<ul>\n"
@@ -236,7 +236,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'OrderedList'])
+.sub 'html' :method :multi(_, ['Markdown'; 'OrderedList'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S0 = "<ol>\n"
@@ -252,7 +252,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'ListItem'])
+.sub 'html' :method :multi(_, ['Markdown'; 'ListItem'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S0 = "<li>"
@@ -268,7 +268,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Link'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Link'])
     .param pmc node
     .local string url, title, content, image
     url = node.'url'()
@@ -325,11 +325,11 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'RefLink'])
+.sub 'html' :method :multi(_, ['Markdown'; 'RefLink'])
     .param pmc node
     .local string key
     key = node.'key'()
-    $P0 = get_hll_global [ 'Markdown';'HTML';'Compiler' ], '%ref'
+    $P0 = get_hll_global ['Markdown'; 'HTML'; 'Compiler'], '%ref'
     $S0 = downcase key
     $P1 = $P0[$S0]
     if null $P1 goto L1
@@ -365,7 +365,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Reference'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Reference'])
     .param pmc node
     .local pmc code
     new code, 'CodeString'
@@ -377,7 +377,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Email'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Email'])
     .param pmc node
     $S0 = "<a href=\""
     $S1 = node.'text'()
@@ -400,7 +400,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Emphasis'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Emphasis'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S0 = "<em>"
@@ -416,7 +416,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Strong'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Strong'])
     .param pmc node
     $S1 = self.'html_children'(node)
     $S0 = "<strong>"
@@ -432,7 +432,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Code'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Code'])
     .param pmc node
     $S1 = node.'text'()
     $S1 = escape_xml($S1)
@@ -450,7 +450,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Entity'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Entity'])
     .param pmc node
     $S0 = node.'text'()
     .local pmc code
@@ -463,7 +463,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Line'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Line'])
     .param pmc node
     $S1 = node.'text'()
     $S0 = escape_xml($S1)
@@ -477,7 +477,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Word'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Word'])
     .param pmc node
     $S1 = node.'text'()
     $S0 = escape_xml($S1)
@@ -491,7 +491,7 @@ Return generated HTML for all of its children.
 
 =cut
 
-.sub 'html' :method :multi(_,['Markdown';'Space'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Space'])
     .param pmc node
     .local pmc code
     new code, 'CodeString'
