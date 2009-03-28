@@ -141,8 +141,6 @@ Return generated HTML for all of its children.
     .param pmc node
     $S1 = self.'html_children'(node)
     $S2 = node.'level'()
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<h"
     $S0 .= $S2
     $S0 .= ">"
@@ -150,6 +148,8 @@ Return generated HTML for all of its children.
     $S0 .= "</h"
     $S0 .= $S2
     $S0 .= ">\n\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -162,11 +162,11 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Para'])
     .param pmc node
     $S1 = self.'html_children'(node)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<p>"
     $S0 .= $S1
     $S0 .= "</p>\n\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -179,11 +179,11 @@ Return generated HTML for all of its children.
     .param pmc node
     $S1 = self.'html_children'(node)
     $S1 = escape_code($S1)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<pre><code>"
     $S0 .= $S1
     $S0 .= "</code></pre>\n\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -194,8 +194,6 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'BlockQuote'])
     .param pmc node
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<blockquote>\n"
     $S0 .= "  "
     .local pmc iter
@@ -212,6 +210,8 @@ Return generated HTML for all of its children.
     dec $I0
     $S0 = substr $S0, 0, $I0
     $S0 .= "</blockquote>\n\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -223,11 +223,11 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'ItemizedList'])
     .param pmc node
     $S1 = self.'html_children'(node)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<ul>\n"
     $S0 .= $S1
     $S0 .= "</ul>\n\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -239,11 +239,11 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'OrderedList'])
     .param pmc node
     $S1 = self.'html_children'(node)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<ol>\n"
     $S0 .= $S1
     $S0 .= "</ol>\n\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -255,11 +255,11 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'ListItem'])
     .param pmc node
     $S1 = self.'html_children'(node)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<li>"
     $S0 .= $S1
     $S0 .= "</li>\n"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -379,8 +379,6 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'Email'])
     .param pmc node
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<a href=\""
     $S1 = node.'text'()
     $S1 = 'mailto:' . $S1
@@ -392,6 +390,8 @@ Return generated HTML for all of its children.
     $S1 = substr $S1, $I0
     $S0 .= $S1
     $S0 .= "</a>"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -403,11 +403,11 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Emphasis'])
     .param pmc node
     $S1 = self.'html_children'(node)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<em>"
     $S0 .= $S1
     $S0 .= "</em>"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -419,11 +419,11 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Strong'])
     .param pmc node
     $S1 = self.'html_children'(node)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<strong>"
     $S0 .= $S1
     $S0 .= "</strong>"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -437,11 +437,11 @@ Return generated HTML for all of its children.
     $S1 = node.'text'()
     $S1 = escape_xml($S1)
     $S1 = escape_code($S1)
-    .local pmc code
-    new code, 'CodeString'
     $S0 = "<code>"
     $S0 .= $S1
     $S0 .= "</code>"
+    .local pmc code
+    new code, 'CodeString'
     set code, $S0
     .return (code)
 .end
@@ -452,10 +452,10 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_,['Markdown';'Entity'])
     .param pmc node
-    $S1 = node.'text'()
+    $S0 = node.'text'()
     .local pmc code
     new code, 'CodeString'
-    set code, $S1
+    set code, $S0
     .return (code)
 .end
 
@@ -466,10 +466,10 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Line'])
     .param pmc node
     $S1 = node.'text'()
-    $S1 = escape_xml($S1)
+    $S0 = escape_xml($S1)
     .local pmc code
     new code, 'CodeString'
-    set code, $S1
+    set code, $S0
     .return (code)
 .end
 
@@ -480,10 +480,10 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_,['Markdown';'Word'])
     .param pmc node
     $S1 = node.'text'()
-    $S1 = escape_xml($S1)
+    $S0 = escape_xml($S1)
     .local pmc code
     new code, 'CodeString'
-    set code, $S1
+    set code, $S0
     .return (code)
 .end
 
