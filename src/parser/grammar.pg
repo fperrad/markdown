@@ -393,7 +393,7 @@ token AutoLinkUrl {
 }
 
 token AutoLinkEmail {
-    '<' ( <[\-A..Za..z0..9+_]>+ '@' [ <!Newline> <!_Gt> . ]+ ) '>'
+    '<' ( <[\-.A..Za..z0..9_]>+ '@' [ <!Newline> <!_Gt> . ]+ ) '>'
     {*}
 }
 
