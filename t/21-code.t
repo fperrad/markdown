@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'code' );
 
 CODE
 <p><code>code</code></p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'printf' );
@@ -33,7 +32,6 @@ Use the `printf()` function.
 
 CODE
 <p>Use the <code>printf()</code> function.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'literal backtick' );
@@ -42,7 +40,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'literal backtick' );
 
 CODE
 <p><code>There is a literal backtick (`) here.</code></p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'with space' );
@@ -55,7 +52,6 @@ CODE
 <p>A single backtick in a code span: <code>`</code></p>
 
 <p>A backtick-delimited string in a code span: <code>`foo`</code></p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'HTML tag' );
@@ -64,7 +60,6 @@ Please don't use any `<blink>` tags.
 
 CODE
 <p>Please don't use any <code>&lt;blink&gt;</code> tags.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'HTML entity' );
@@ -73,7 +68,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'HTML entity' );
 
 CODE
 <p><code>&amp;#8212;</code> is the decimal-encoded equivalent of <code>&amp;mdash;</code>.</p>
-
 OUT
 
 # Local Variables:

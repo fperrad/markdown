@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'CharEntity' );
 
 CODE
 <p>4 &lt; 5</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'HexEntity' );
@@ -33,9 +32,7 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'HexEntity' );
 
 CODE
 <p>20 &#x20ac;.</p>
-
 OUT
-
 
 
 # Local Variables:

@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'asterisk' );
 
 CODE
 <p>*literal astericks*</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'dot' );
@@ -33,7 +32,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'dot' );
 
 CODE
 <p>1986. What a great season.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'symbol (not escaped)' );
@@ -42,7 +40,6 @@ Hello, World!
 
 CODE
 <p>Hello, World!</p>
-
 OUT
 
 # Local Variables:

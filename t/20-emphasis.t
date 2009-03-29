@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'emphasis star' );
 
 CODE
 <p><em>emphasis</em> (e.g., italics)</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'strong star' );
@@ -33,7 +32,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'strong star' );
 
 CODE
 <p><strong>strong emphasis</strong> (e.g., boldface)</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'emphasis UI' );
@@ -42,7 +40,6 @@ _emphasis_ (e.g., italics)
 
 CODE
 <p><em>emphasis</em> (e.g., italics)</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'strong UI' );
@@ -51,7 +48,6 @@ __strong emphasis__ (e.g., boldface)
 
 CODE
 <p><strong>strong emphasis</strong> (e.g., boldface)</p>
-
 OUT
 
 

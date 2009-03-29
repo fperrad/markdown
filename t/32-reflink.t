@@ -27,7 +27,6 @@ You can also put the [link URL][1] below the current paragraph like [this][2].
 
 CODE
 <p>You can also put the <a href="http://url">link URL</a> below the current paragraph like <a href="http://another.url" title="A funky title">this</a>.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference link simple' );
@@ -38,7 +37,6 @@ Or you can use a [shortcut][] reference, which links the text "shortcut"
 
 CODE
 <p>Or you can use a <a href="http://goes/with/the/link/name/text">shortcut</a> reference, which links the text "shortcut"</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference link simple' );
@@ -51,7 +49,6 @@ to the link named "[shortcut]" on the next paragraph.
 CODE
 <p>Or you can use a <a href="http://goes/with/the/link/name/text">shortcut</a> reference, which links the text "shortcut"
 to the link named "[shortcut]" on the next paragraph.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'pathologic label reference link' );
@@ -62,7 +59,6 @@ With [embedded [brackets]] [b].
 
 CODE
 <p>With <a href="/url/">embedded [brackets]</a>.</p>
-
 OUT
 
 

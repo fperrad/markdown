@@ -17,5 +17,7 @@ src/gen_*.pir
 
 t/*.text
 t/*.html
+t/*.parse
+t/*.past
 t/*.zip
 t/MarkdownTest_1.0

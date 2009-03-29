@@ -25,7 +25,6 @@ First-level heading
 
 CODE
 <h1>First-level heading</h1>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'SetextHeading2' );
@@ -35,7 +34,6 @@ Second-level heading
 
 CODE
 <h2>Second-level heading</h2>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'AtxHeading 1' );
@@ -44,7 +42,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'AtxHeading 1' );
 
 CODE
 <h1>First-level heading</h1>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'AtxHeading 4' );
@@ -53,7 +50,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'AtxHeading 4' );
 
 CODE
 <h4>Fourth-level heading</h4>
-
 OUT
 
 # Local Variables:

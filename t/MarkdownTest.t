@@ -40,7 +40,7 @@ foreach my $test_file (@test_files) {
     my $test_name = basename($test_file, '.text');
 
     my $code = Parrot::Test::slurp_file( $test_file ) . "\n";
-    my $out = Parrot::Test::slurp_file(File::Spec->catfile( @dir, "$test_name.html" )) . "\n";
+    my $out = Parrot::Test::slurp_file(File::Spec->catfile( @dir, "$test_name.html" )) ;
     language_output_is( 'markdown', $code, $out, $test_name );
 }
 

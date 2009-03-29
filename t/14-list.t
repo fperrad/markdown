@@ -28,7 +28,6 @@ CODE
 <li>An item in a bulleted (unordered) list</li>
 <li>Another item in a bulleted list</li>
 </ul>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'ordered tight' );
@@ -41,7 +40,6 @@ CODE
 <li>An item in a enumeradted (ordered) list</li>
 <li>Another item in a enumeradted list</li>
 </ol>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'unordered loose' );
@@ -55,7 +53,6 @@ CODE
 <li><p>Bird</p></li>
 <li><p>Magic</p></li>
 </ul>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'with continuation' );
@@ -70,7 +67,6 @@ CODE
 With continuation.</li>
 <li>Another item in the list.</li>
 </ul>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'with multi-para' );
@@ -88,7 +84,6 @@ CODE
 <p>Para 2.</p></li>
 <li><p>Another item in the list.</p></li>
 </ul>
-
 OUT
 
 

@@ -24,7 +24,6 @@ This is an [example link](http://example.com/).
 
 CODE
 <p>This is an <a href="http://example.com/">example link</a>.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'inline link with title' );
@@ -33,7 +32,6 @@ This is an [example link](http://example.com/ "With a Title").
 
 CODE
 <p>This is an <a href="http://example.com/" title="With a Title">example link</a>.</p>
-
 OUT
 
 

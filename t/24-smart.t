@@ -24,7 +24,6 @@ use Test::More;
 #
 #CODE
 #<p>smart &rsquo;</p>
-#
 #OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'ellipsis' );
@@ -37,7 +36,6 @@ CODE
 <p>smart &hellip;</p>
 
 <p>smart &hellip;</p>
-
 OUT
 
 #language_output_is( 'markdown', <<'CODE', <<'OUT', 'endash' );
@@ -46,7 +44,6 @@ OUT
 #
 #CODE
 #<p>smart &ndash;</p>
-#
 #OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'emdash' );
@@ -59,7 +56,6 @@ CODE
 <p>smart &mdash;</p>
 
 <p>smart &mdash;</p>
-
 OUT
 
 

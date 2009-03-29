@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'autolink url' );
 
 CODE
 <p><a href="http://someurl">http://someurl</a></p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'autolink email' );
@@ -33,7 +32,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'autolink email' );
 
 CODE
 <p><a href="&#x6D;&#x61;&#x69;&#x6C;&#x74;&#x6F;:&#x73;&#x6F;&#x6D;&#x65;&#x62;&#x62;&#x6F;&#x62;&#x40;&#x65;&#x78;&#x61;&#x6D;&#x70;&#x6C;&#x65;&#x2E;&#x63;&#x6F;&#x6D;">&#x73;&#x6F;&#x6D;&#x65;&#x62;&#x62;&#x6F;&#x62;&#x40;&#x65;&#x78;&#x61;&#x6D;&#x70;&#x6C;&#x65;&#x2E;&#x63;&#x6F;&#x6D;</a></p>
-
 OUT
 
 

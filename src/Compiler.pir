@@ -106,12 +106,14 @@ Return generated HTML for all of its children.
 
 .sub 'html_children' :method
     .param pmc node
+    .param string fsep  :optional
+    .param int has_fsep :opt_flag
     .param string ssep  :optional
     .param int has_ssep :opt_flag
     .param string esep  :optional
     .param int has_esep :opt_flag
-    .param string lsep  :optional
-    .param int has_lsep :opt_flag
+    .local int first
+    first = 1
     .local pmc code, iter
     code = new 'CodeString'
     iter = node.'iterator'()
@@ -122,20 +124,21 @@ Return generated HTML for all of its children.
     $P0 = self.'html'(cpast)
     $I0 = elements $P0
     unless $I0 goto iter_loop
-    unless has_ssep goto L1
-    code .= ssep
+    unless first goto L1
+    first = 0
+    unless has_fsep goto L2
+    code .= fsep
+    goto L2
   L1:
-    code .= $P0
-    unless iter goto iter_end
-    unless has_esep goto L2
-    code .= esep
+    unless has_ssep goto L2
+    code .= ssep
   L2:
+    code .= $P0
+    unless has_esep goto L3
+    code .= esep
+  L3:
     goto iter_loop
   iter_end:
-    unless $I0 goto L3
-    unless has_lsep goto L3
-    code .= lsep
-  L3:
     .return (code)
 .end
 
@@ -156,7 +159,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Document'])
     .param pmc node
-    .tailcall self.'html_children'(node, '', "\n\n", "\n\n")
+    .tailcall self.'html_children'(node, '', "\n", "\n")
 .end
 
 
@@ -236,7 +239,7 @@ Return generated HTML for all of its children.
     .param pmc node
     $S0 = "<blockquote>\n"
     $S0 .= "  "
-    $S1 = self.'html_children'(node, '', "\n\n", "\n")
+    $S1 = self.'html_children'(node, '', "\n", "\n")
     $S0 .= $S1
     $S0 .= "</blockquote>"
     .local pmc code
@@ -289,7 +292,7 @@ Return generated HTML for all of its children.
     $S1 = self.'html_children'(node)
     goto L2
   L1:
-    $S1 = self.'html_children'(node, "<p>", "</p>\n\n", "</p>")
+    $S1 = self.'html_children'(node, "<p>", "\n\n<p>", "</p>")
   L2:
     $S0 .= $S1
     $S0 .= "</li>\n"

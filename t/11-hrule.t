@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'rule *' );
 
 CODE
 <hr />
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'rule -' );
@@ -33,7 +32,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'rule -' );
 
 CODE
 <hr />
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'rule _' );
@@ -42,7 +40,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'rule _' );
 
 CODE
 <hr />
-
 OUT
 
 # Local Variables:

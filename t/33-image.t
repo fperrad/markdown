@@ -24,7 +24,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'image' );
 
 CODE
 <p><img src="http://someurl.image.gif" alt="alternate text" title="" /></p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'image with title' );
@@ -33,7 +32,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'image with title' );
 
 CODE
 <p><img src="http://greg.vario.us/img/extlink.png" alt="tiny arrow" title="tiny arrow" /></p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference image' );
@@ -44,7 +42,6 @@ language_output_is( 'markdown', <<'CODE', <<'OUT', 'reference image' );
 
 CODE
 <p><img src="/path/to/img.jpg" alt="alt text" title="Title" /></p>
-
 OUT
 
 

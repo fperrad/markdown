@@ -28,7 +28,6 @@ CODE
 <p>This is a paragraph. It has two sentences.</p>
 
 <p>This is another paragraph. It also has two sentences.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'Para multi-line' );
@@ -39,7 +38,6 @@ It has two sentences.
 CODE
 <p>This is a paragraph.
 It has two sentences.</p>
-
 OUT
 
 

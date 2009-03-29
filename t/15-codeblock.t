@@ -29,7 +29,6 @@ CODE
 
 <pre><code>This is a code block.
 </code></pre>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'CodeBlock 2' );
@@ -47,7 +46,6 @@ CODE
     bell
 end tell
 </code></pre>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'CodeBlock HTML' );
@@ -65,7 +63,6 @@ CODE
     &amp;copy; 2004 Foo Corporation
 &lt;/div&gt;
 </code></pre>
-
 OUT
 
 # Local Variables:

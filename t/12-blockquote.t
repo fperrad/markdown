@@ -26,7 +26,6 @@ CODE
 <blockquote>
   <p>This text will be enclosed in an HTML blockquote element.</p>
 </blockquote>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 2' );
@@ -39,7 +38,6 @@ CODE
   <p>Use the > character in front of a line, <em>just like in email</em>.
 Use it if you're quoting a person, a song or whatever.</p>
 </blockquote>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 3' );
@@ -60,7 +58,6 @@ part of the blockquote, even without the > character in front.</p>
 </blockquote>
 
 <p>To end the blockquote, just put a blank line before the following paragraph.</p>
-
 OUT
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 4' );
@@ -75,7 +72,6 @@ CODE
 
 <p>Use it if you're quoting a person, a song or whatever.</p>
 </blockquote>
-
 OUT
 
 # Local Variables:
