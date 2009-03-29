@@ -16,6 +16,8 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
 .namespace ['Markdown'; 'HTML'; 'Compiler']
 
 .sub '__onload' :anon :load :init
+    load_bytecode 'Math/Rand.pbc'
+
     $P0 = get_hll_global 'P6metaclass'
     $P0 = $P0.'new_class'('Markdown::HTML::Compiler')
 
@@ -84,13 +86,26 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
   L1:
     unless $P0 goto L2
     $S1 = shift $P0
-    unless $S1 == ':' goto L3
-    $S0 .= $S1
-    goto L1
-  L3:
+    if $S1 == '@' goto L_dec
+    if $S1 == ':' goto L_raw
+    .local pmc rand
+    rand = get_hll_global [ 'Math'; 'Rand' ], 'rand'
+    $I0 = rand()
+    # roughly 10% raw, 45% hex, 45% dec
+    $I0 %= 20
+    if $I0 >= 18 goto L_raw
+    if $I0 >= 9 goto L_hex
+  L_dec:
+    $I1 = ord $S1
+    $S1 = $I1
+    $S1 = '&#' . $S1
+    $S1 .= ';'
+    goto L_raw
+  L_hex:
     $I1 = ord $S1
     $P1[0] = $I1
     $S1 = sprintf '&#x%X;', $P1
+  L_raw:
     $S0 .= $S1
     goto L1
   L2:
