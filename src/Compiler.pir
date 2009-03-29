@@ -106,8 +106,10 @@ Return generated HTML for all of its children.
 
 .sub 'html_children' :method
     .param pmc node
-    .param string sep  :optional
-    .param int has_sep :opt_flag
+    .param string ssep  :optional
+    .param int has_ssep :opt_flag
+    .param string esep  :optional
+    .param int has_esep :opt_flag
     .local pmc code, iter
     code = new 'CodeString'
     iter = node.'iterator'()
@@ -118,10 +120,13 @@ Return generated HTML for all of its children.
     $P0 = self.'html'(cpast)
     $I0 = elements $P0
     unless $I0 goto iter_loop
-    code .= $P0
-    unless has_sep goto L1
-    code .= sep
+    unless has_ssep goto L1
+    code .= ssep
   L1:
+    code .= $P0
+    unless has_esep goto L2
+    code .= esep
+  L2:
     goto iter_loop
   iter_end:
     .return (code)
@@ -144,7 +149,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Document'])
     .param pmc node
-    .tailcall self.'html_children'(node, "\n\n")
+    .tailcall self.'html_children'(node, '', "\n\n")
 .end
 
 
@@ -224,7 +229,7 @@ Return generated HTML for all of its children.
     .param pmc node
     $S0 = "<blockquote>\n"
     $S0 .= "  "
-    $S1 = self.'html_children'(node, "\n\n")
+    $S1 = self.'html_children'(node, '', "\n\n")
     $I0 = length $S1
     dec $I0
     $S1 = substr $S1, 0, $I0
@@ -274,16 +279,18 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'ListItem'])
     .param pmc node
-    $S1 = self.'html_children'(node)
-    $I0 = node.'loose'()
     $S0 = "<li>"
-    unless $I0 goto L1
-    $S0 .= "<p>"
+    $I0 = node.'loose'()
+    if $I0 goto L1
+    $S1 = self.'html_children'(node)
+    goto L2
   L1:
-    $S0 .= $S1
-    unless $I0 goto L2
-    $S0 .= "</p>"
+    $S1 = self.'html_children'(node, "<p>", "</p>\n\n")
+    $I0 = length $S1
+    $I0 -= 2
+    $S1 = substr $S1, 0, $I0
   L2:
+    $S0 .= $S1
     $S0 .= "</li>\n"
     .local pmc code
     new code, 'CodeString'

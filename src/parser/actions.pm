@@ -194,8 +194,7 @@ method BulletListItem($/) {
 
 method ListItem($/) {
     if ( $<ListContinuationBlock> ) {
-        my $mast := Markdown::ListItem.new( :loose( 1 ),
-                                            $( $<ListBlock> ) );
+        my $mast := Markdown::ListItem.new( $( $<ListBlock> ) );
         for $<ListContinuationBlock> {
             $mast.push( $( $_ ) );
         }
@@ -211,13 +210,20 @@ method ListBlock($/) {
     for $<Inline> {
         $mast.push( $( $_ ) );
     }
+    for $<ListBlockLine> {
+        $mast.push( Markdown::Newline.new() );
+        $mast.push( $( $_ ) );
+    }
     make $mast;
+}
+
+method ListBlockLine($/) {
+    make $( $<OptionallyIndentedLine><Line> );
 }
 
 method ListContinuationBlock($/) {
     my $mast := Markdown::Node.new();
     for $<ListBlock> {
-        $mast.push( Markdown::Newline.new() );
         $mast.push( $( $_ ) );
     }
     make $mast;

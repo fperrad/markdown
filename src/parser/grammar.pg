@@ -148,12 +148,12 @@ token BulletListItem {
 }
 
 token ListItem {
-    [ <.Bullet> | <.Enumerator> ] <ListBlock> <ListContinuationBlock>* <.Newline>
+    [ <.Bullet> | <.Enumerator> ] <ListBlock> <ListContinuationBlock>*
     {*}
 }
 
 token ListBlock {
-    <Inline>+ <ListBlockLine>*
+    <Inline>+ <.Newline> <ListBlockLine>*
     {*}
 }
 
@@ -190,6 +190,7 @@ token OrderedListItem {
 
 token ListBlockLine {
     <!_ListItem> <!BlankLine> <OptionallyIndentedLine>
+    {*}
 }
 
 token _ListItem {

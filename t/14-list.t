@@ -15,10 +15,10 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
 
-use Parrot::Test tests => 3;
+use Parrot::Test tests => 5;
 use Test::More;
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'unordered' );
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'unordered tight' );
 
 - An item in a bulleted (unordered) list
 - Another item in a bulleted list
@@ -31,7 +31,7 @@ CODE
 
 OUT
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'ordered' );
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'ordered tight' );
 
 1. An item in a enumeradted (ordered) list
 2. Another item in a enumeradted list
@@ -54,6 +54,39 @@ CODE
 <ul>
 <li><p>Bird</p></li>
 <li><p>Magic</p></li>
+</ul>
+
+OUT
+
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'with continuation' );
+
+*   A list item.
+    With continuation.
+*   Another item in the list.
+
+CODE
+<ul>
+<li>A list item.
+With continuation.</li>
+<li>Another item in the list.</li>
+</ul>
+
+OUT
+
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'with multi-para' );
+
+*   Para 1.
+
+    Para 2.
+
+*   Another item in the list.
+
+CODE
+<ul>
+<li><p>Para 1.</p>
+
+<p>Para 2.</p></li>
+<li><p>Another item in the list.</p></li>
 </ul>
 
 OUT
