@@ -181,7 +181,9 @@ method BulletListTight($/) {
 method BulletListLoose($/) {
     my $mast := Markdown::ItemizedList.new();
     for $<BulletListItem> {
-        $mast.push( $( $_ ) );
+        my $item := $( $_ );
+        $item.loose( 1 );
+        $mast.push( $item );
     }
     make $mast;
 }
@@ -192,11 +194,12 @@ method BulletListItem($/) {
 
 method ListItem($/) {
     if ( $<ListContinuationBlock> ) {
-        my $mast := Markdown::Para.new( $( $<ListBlock> ) );
+        my $mast := Markdown::ListItem.new( :loose( 1 ),
+                                            $( $<ListBlock> ) );
         for $<ListContinuationBlock> {
             $mast.push( $( $_ ) );
         }
-        make Markdown::ListItem.new( $mast );
+        make $mast;
     }
     else {
         make Markdown::ListItem.new( $( $<ListBlock> ) );
@@ -235,7 +238,9 @@ method OrderedListTight($/) {
 method OrderedListLoose($/) {
     my $mast := Markdown::OrderedList.new();
     for $<OrderedListItem> {
-        $mast.push( $( $_ ) );
+        my $item := $( $_ );
+        $item.loose( 1 );
+        $mast.push( $item );
     }
     make $mast;
 }

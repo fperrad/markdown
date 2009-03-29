@@ -78,6 +78,15 @@ for Markdown.
 .end
 
 
+.namespace ['Markdown'; 'ListItem']
+
+.sub 'loose' :method
+    .param pmc value           :optional
+    .param int has_value       :opt_flag
+    .tailcall self.'attr'('loose', value, has_value)
+.end
+
+
 .namespace ['Markdown'; 'RefLink']
 
 .sub 'image' :method

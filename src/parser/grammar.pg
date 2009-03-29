@@ -148,7 +148,7 @@ token BulletListItem {
 }
 
 token ListItem {
-    [ <.Bullet> | <.Enumerator> ] <ListBlock> <ListContinuationBlock>*
+    [ <.Bullet> | <.Enumerator> ] <ListBlock> <ListContinuationBlock>* <.Newline>
     {*}
 }
 

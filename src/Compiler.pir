@@ -275,8 +275,15 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_, ['Markdown'; 'ListItem'])
     .param pmc node
     $S1 = self.'html_children'(node)
+    $I0 = node.'loose'()
     $S0 = "<li>"
+    unless $I0 goto L1
+    $S0 .= "<p>"
+  L1:
     $S0 .= $S1
+    unless $I0 goto L2
+    $S0 .= "</p>"
+  L2:
     $S0 .= "</li>\n"
     .local pmc code
     new code, 'CodeString'

@@ -15,7 +15,7 @@ use warnings;
 use FindBin;
 use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
 
-use Parrot::Test tests => 2;
+use Parrot::Test tests => 3;
 use Test::More;
 
 language_output_is( 'markdown', <<'CODE', <<'OUT', 'unordered' );
@@ -41,6 +41,20 @@ CODE
 <li>An item in a enumeradted (ordered) list</li>
 <li>Another item in a enumeradted list</li>
 </ol>
+
+OUT
+
+language_output_is( 'markdown', <<'CODE', <<'OUT', 'unordered loose' );
+
+* Bird
+
+* Magic
+
+CODE
+<ul>
+<li><p>Bird</p></li>
+<li><p>Magic</p></li>
+</ul>
 
 OUT
 
