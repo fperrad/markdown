@@ -237,7 +237,7 @@ token Str {
 }
 
 token EscapedChar {
-    '\\' <!Newline> (.)
+    '\\' (<-[\n]>)
     {*}
 }
 
@@ -394,16 +394,14 @@ token AutoLink {
 }
 
 token AutoLinkUrl {
-    '<' ( <[A..Za..z]>+ '://' [ <!Newline> <!_Gt> . ]+ ) '>'
+    '<' ( <[A..Za..z]>+ '://' <-[>\n]>+ ) '>'
     {*}
 }
 
 token AutoLinkEmail {
-    '<' ( <[\-.A..Za..z0..9_]>+ '@' [ <!Newline> <!_Gt> . ]+ ) '>'
+    '<' ( <[\-.A..Za..z0..9_]>+ '@' <-[>\n]>+ ) '>'
     {*}
 }
-
-token _Gt { '>' }
 
 token Reference {
     <.NonindentSpace> <!_EmptyLabel> <Label> ':' <.Spnl> <RefSrc> <.Spnl> <RefTitle> <.BlankLine>*
@@ -509,13 +507,9 @@ token RawHtml {
 token BlankLine { <.Sp> <.Newline> {*} }
 
 token Quoted {
-    | <._Quote> [ <!_Quote> . ]* <._Quote>
-    | <._Apos> [ <!_Apos> . ]* <._Apos>
+    | '"' <-["]>* '"'
+    | '\'' <-[']>* '\''
 }
-
-token _Quote { '"' }
-
-token _Apos { '\'' }
 
 token HtmlAttribute {
     <._HtmlName> <.Spnl> [ '=' <.Spnl> [ <.Quoted> | <.Nonspacechar>+] ]? <.Spnl>
