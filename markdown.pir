@@ -12,7 +12,7 @@ as a command line (without interactive mode) :
                                    PAST
                                    HTML
 
-or as a library :
+or as a library from PIR code :
 
      load_bytecode 'markdown.pbc'
      $P0 = compreg 'markdown'
@@ -24,6 +24,17 @@ or as a library :
      $P1 = $P0.'compile'($S0)
      $S0 = $P1()
      print $S0
+
+or as a compiler from Rakudo :
+
+     my $markdown = q{
+ Title
+ =====
+ Some text.
+
+     };
+
+     say eval($markdown, :lang<markdown>);
 
 =head2 Description
 
