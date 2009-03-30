@@ -255,8 +255,9 @@ method OrderedListItem($/) {
     make $( $<ListItem> );
 }
 
-method HtmlBlock($/, $key) {
-    make $( $/{$key} );
+method HtmlBlock($/) {
+    make Markdown::Html.new( :text( $/.text() ),
+                             :detab( 1 ) );
 }
 
 method Emph($/, $key) {

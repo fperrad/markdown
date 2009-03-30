@@ -198,9 +198,37 @@ token _ListItem {
     <.Indent>? [ <BulletListItem> | <OrderedListItem> ]
 }
 
-token HtmlBlock {
-    | <HtmlComment> {*}         #= HtmlComment
+token HtmlBlockInTags {
+     <._HtmlStartTag> [ <._HtmlContent> <._HtmlStopTag> ]?
 }
+
+token HtmlBlock {
+    [
+    | <.HtmlBlockInTags>
+    | <.HtmlComment>
+    | <.HtmlBlockSelfClosing>
+    ] <.Sp>
+    {*}
+}
+
+token HtmlBlockSelfClosing {
+    '<' <._HtmlName> <.Spnl> <.HtmlAttribute>* '/>'
+}
+
+token _HtmlStopTag {
+    '</' <._HtmlName> <.Spnl> '>'
+}
+
+token _HtmlStartTag {
+    '<' <._HtmlName> <.Spnl> <.HtmlAttribute>* '>'
+}
+
+token _HtmlContent {
+    <_HtmlCharData> [ <HtmlBlock> <_HtmlCharData> ]*
+}
+
+token _HtmlCharData { <-[<&]>* }
+
 
 token Inlines {
     <_Inline>+
