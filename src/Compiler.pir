@@ -77,6 +77,21 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     .return (str)
 .end
 
+.sub 'detabn' :anon
+    .param string str
+    $P0 = split "\n", str
+    $P1 = new 'ResizableStringArray'
+  L1:
+    unless $P0 goto L2
+    $S0 = shift $P0
+    $S0 = detab($S0)
+    push $P1, $S0
+    goto L1
+  L2:
+    str = join "\n", $P1
+    .return (str)
+.end
+
 .sub 'obscure_text' :anon
     .param string str
     $S0 = ''
@@ -506,6 +521,10 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_, ['Markdown'; 'Entity'])
     .param pmc node
     $S0 = node.'text'()
+    $I0 = node.'detab'()
+    unless $I0 goto L1
+    $S0 = detabn($S0)
+  L1:
     .local pmc code
     new code, 'CodeString'
     set code, $S0

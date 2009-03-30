@@ -25,6 +25,7 @@ token Block {
         | <Heading> {*}         #= Heading
         | <OrderedList> {*}     #= OrderedList
         | <BulletList> {*}      #= BulletList
+        | <HtmlBlock> {*}       #= HtmlBlock
         | <Para> {*}            #= Para
     ]
 }
@@ -195,6 +196,10 @@ token ListBlockLine {
 
 token _ListItem {
     <.Indent>? [ <BulletListItem> | <OrderedListItem> ]
+}
+
+token HtmlBlock {
+    | <HtmlComment> {*}         #= HtmlComment
 }
 
 token Inlines {

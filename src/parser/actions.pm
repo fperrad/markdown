@@ -255,6 +255,10 @@ method OrderedListItem($/) {
     make $( $<ListItem> );
 }
 
+method HtmlBlock($/, $key) {
+    make $( $/{$key} );
+}
+
 method Emph($/, $key) {
     make $( $/{$key} );
 }
@@ -365,7 +369,8 @@ method RawHtml($/, $key) {
 }
 
 method HtmlComment($/) {
-    make Markdown::Entity.new( :text( $/.text() ) );
+    make Markdown::Entity.new( :text( $/.text() ),
+                               :detab( 1 ) );
 }
 
 method HtmlTag($/) {

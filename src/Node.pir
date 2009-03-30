@@ -47,9 +47,6 @@ for Markdown.
     .tailcall self.'attr'('text', value, has_value)
 .end
 
-
-.namespace ['Markdown'; 'Line']
-
 .sub 'detab' :method
     .param pmc value           :optional
     .param int has_value       :opt_flag
