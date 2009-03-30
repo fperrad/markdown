@@ -360,6 +360,18 @@ method Code($/) {
     make Markdown::Code.new( :text( $/[0].text() ) );
 }
 
+method RawHtml($/, $key) {
+    make $( $/{$key} );
+}
+
+method HtmlComment($/) {
+    make Markdown::Entity.new( :text( $/.text() ) );
+}
+
+method HtmlTag($/) {
+    make Markdown::Entity.new( :text( $/.text() ) );
+}
+
 method EscapedChar($/) {
     make Markdown::Word.new( :text( $/[0].text() ) );
 }

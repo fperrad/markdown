@@ -216,6 +216,7 @@ token Inline {
     | <Image> {*}               #= Image
     | <Link> {*}                #= Link
     | <Code> {*}                #= Code
+    | <RawHtml> {*}             #= RawHtml
     | <Entity> {*}              #= Entity
     | <EscapedChar> {*}         #= EscapedChar
     | <Smart> {*}               #= Smart
@@ -495,7 +496,37 @@ token _Code5 {
     ]+
 }
 
+token RawHtml {
+    | <HtmlComment> {*}         #= HtmlComment
+    | <HtmlTag> {*}             #= HtmlTag
+}
+
 token BlankLine { <.Sp> <.Newline> {*} }
+
+token Quoted {
+    | <._Quote> [ <!_Quote> . ]* <._Quote>
+    | <._Apos> [ <!_Apos> . ]* <._Apos>
+}
+
+token _Quote { '"' }
+
+token _Apos { '\'' }
+
+token HtmlAttribute {
+    [ <.Alphanumeric> | '-' ]+ <.Spnl> [ '=' <.Spnl> [ <.Quoted> | <.Nonspacechar>+] ]? <.Spnl>
+}
+
+token HtmlComment {
+    '<!--' [ <!_HtmlCommentEnd> . ]* <._HtmlCommentEnd>
+    {*}
+}
+
+token _HtmlCommentEnd { '-->' }
+
+token HtmlTag {
+    '<' <.Spnl> '/'? <.Alphanumeric>+ <.Spnl> <.HtmlAttribute>* '/'? <.Spnl> '>'
+    {*}
+}
 
 token Eof { $ }
 
