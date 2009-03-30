@@ -369,12 +369,12 @@ method RawHtml($/, $key) {
 }
 
 method HtmlComment($/) {
-    make Markdown::Entity.new( :text( $/.text() ),
-                               :detab( 1 ) );
+    make Markdown::Html.new( :text( $/.text() ),
+                             :detab( 1 ) );
 }
 
 method HtmlTag($/) {
-    make Markdown::Entity.new( :text( $/.text() ) );
+    make Markdown::Html.new( :text( $/.text() ) );
 }
 
 method EscapedChar($/) {
@@ -382,7 +382,7 @@ method EscapedChar($/) {
 }
 
 method Entity($/) {
-    make Markdown::Entity.new( :text( $/.text() ) );
+    make Markdown::Html.new( :text( $/.text() ) );
 }
 
 method Symbol($/) {
@@ -410,7 +410,7 @@ method Apostrophe($/) {
         make Markdown::Word.new( :text( $/.text() ) );
 #    }
 #    else {
-#        make Markdown::Entity.new( :text( '&rsquo;' ) );
+#        make Markdown::Html.new( :text( '&rsquo;' ) );
 #    }
 }
 
@@ -419,7 +419,7 @@ method Ellipsis($/) {
         make Markdown::Word.new( :text( $/.text() ) );
     }
     else {
-        make Markdown::Entity.new( :text( '&hellip;' ) );
+        make Markdown::Html.new( :text( '&hellip;' ) );
     }
 }
 
@@ -432,7 +432,7 @@ method EnDash($/) {
         make Markdown::Word.new( :text( $/.text() ) );
 #    }
 #    else {
-#        make Markdown::Entity.new( :text( '&ndash;' ) );
+#        make Markdown::Html.new( :text( '&ndash;' ) );
 #    }
 }
 
@@ -441,7 +441,7 @@ method EmDash($/) {
         make Markdown::Word.new( :text( $/.text() ) );
     }
     else {
-        make Markdown::Entity.new( :text( '&mdash;' ) );
+        make Markdown::Html.new( :text( '&mdash;' ) );
     }
 }
 

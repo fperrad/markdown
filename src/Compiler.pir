@@ -514,11 +514,11 @@ Return generated HTML for all of its children.
     .return (code)
 .end
 
-=item html(Markdown::Entity node)
+=item html(Markdown::Html node)
 
 =cut
 
-.sub 'html' :method :multi(_, ['Markdown'; 'Entity'])
+.sub 'html' :method :multi(_, ['Markdown'; 'Html'])
     .param pmc node
     $S0 = node.'text'()
     $I0 = node.'detab'()
