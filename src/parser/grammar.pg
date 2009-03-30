@@ -513,8 +513,10 @@ token _Quote { '"' }
 token _Apos { '\'' }
 
 token HtmlAttribute {
-    [ <.Alphanumeric> | '-' ]+ <.Spnl> [ '=' <.Spnl> [ <.Quoted> | <.Nonspacechar>+] ]? <.Spnl>
+    <._HtmlName> <.Spnl> [ '=' <.Spnl> [ <.Quoted> | <.Nonspacechar>+] ]? <.Spnl>
 }
+
+token _HtmlName { <[A..Za..z_:]> <[A..Za..z0..9.\-_:]>* }
 
 token HtmlComment {
     '<!--' [ <!_HtmlCommentEnd> . ]* <._HtmlCommentEnd>
@@ -524,7 +526,10 @@ token HtmlComment {
 token _HtmlCommentEnd { '-->' }
 
 token HtmlTag {
-    '<' <.Spnl> '/'? <.Alphanumeric>+ <.Spnl> <.HtmlAttribute>* '/'? <.Spnl> '>'
+    [
+    | '</' <._HtmlName> <.Spnl> '>'
+    | '<' <._HtmlName> <.Spnl> <.HtmlAttribute>* '/'? '>'
+    ]
     {*}
 }
 
