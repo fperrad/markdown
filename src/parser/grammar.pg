@@ -241,7 +241,7 @@ token _Inline {
 }
 
 token Inline {
-    | <Str> {*}                 #= Str
+    | <String> {*}              #= String
 #    | <Endline> {*}             #= Endline
     | <Space> {*}               #= Space
     | <Strong> {*}              #= Strong
@@ -260,7 +260,7 @@ token Space {
     <.Spacechar>+ {*}
 }
 
-token Str {
+token String {
     <.NormalChar>+ {*}
 }
 

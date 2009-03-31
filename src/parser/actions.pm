@@ -135,11 +135,11 @@ method Line($/) {
 }
 
 method BlankLine($/) {
-    make Markdown::Newline.new( :text( $/.text() ) );
+    make Markdown::Newline.new( :text( $/.Str() ) );
 }
 
 method NonblankIndentedLine($/) {
-    make Markdown::Line.new( :text( ~$<IndentedLine><Line><RawLine>.text() ),
+    make Markdown::Line.new( :text( ~$<IndentedLine><Line><RawLine>.Str() ),
                              :detab( 1 ) );
 }
 
@@ -256,7 +256,7 @@ method OrderedListItem($/) {
 }
 
 method HtmlBlock($/) {
-    make Markdown::Html.new( :text( $/.text() ),
+    make Markdown::Html.new( :text( $/.Str() ),
                              :detab( 1 ) );
 }
 
@@ -319,8 +319,8 @@ method ReferenceLink($/, $key) {
 }
 
 method ReferenceLinkDouble($/) {
-    my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].text() ),
-                                       :text( $/.text() ) );
+    my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].Str() ),
+                                       :text( $/.Str() ) );
     for $<Label>[0]<Inline> {
         $mast.push( $( $_ ) );
     }
@@ -328,13 +328,13 @@ method ReferenceLinkDouble($/) {
 }
 
 method ReferenceLinkSingle($/) {
-    make Markdown::RefLink.new( :key( ~$<Label>.text() ),
-                                :text( $/.text() ) );
+    make Markdown::RefLink.new( :key( ~$<Label>.Str() ),
+                                :text( $/.Str() ) );
 }
 
 method ExplicitLink($/) {
-    my $mast := Markdown::Link.new( :title( ~$<Title>[0].text() ),
-                                    :url( ~$<Source><SourceContents>.text() ) );
+    my $mast := Markdown::Link.new( :title( ~$<Title>[0].Str() ),
+                                    :url( ~$<Source><SourceContents>.Str() ) );
     for $<Label><Inline> {
         $mast.push( $( $_ ) );
     }
@@ -346,23 +346,23 @@ method AutoLink($/, $key) {
 }
 
 method AutoLinkUrl($/) {
-    my $mast := Markdown::Link.new( :url( $/[0].text() ) );
-    $mast.push( Markdown::Line.new( :text( $/[0].text() ) ));
+    my $mast := Markdown::Link.new( :url( $/[0].Str() ) );
+    $mast.push( Markdown::Line.new( :text( $/[0].Str() ) ));
     make $mast
 }
 
 method AutoLinkEmail($/) {
-    make Markdown::Email.new( :text( $/[0].text() ) );
+    make Markdown::Email.new( :text( $/[0].Str() ) );
 }
 
 method Reference($/) {
     my $mast := Markdown::Reference.new( );
-    $mast.insert( ~$<Label>.text(), ~$<RefSrc>.text(), ~$<RefTitle>[0].text() );
+    $mast.insert( ~$<Label>.Str(), ~$<RefSrc>.Str(), ~$<RefTitle>[0].Str() );
     make $mast
 }
 
 method Code($/) {
-    make Markdown::Code.new( :text( $/[0].text() ) );
+    make Markdown::Code.new( :text( $/[0].Str() ) );
 }
 
 method RawHtml($/, $key) {
@@ -370,36 +370,36 @@ method RawHtml($/, $key) {
 }
 
 method HtmlComment($/) {
-    make Markdown::Html.new( :text( $/.text() ),
+    make Markdown::Html.new( :text( $/.Str() ),
                              :detab( 1 ) );
 }
 
 method HtmlTag($/) {
-    make Markdown::Html.new( :text( $/.text() ) );
+    make Markdown::Html.new( :text( $/.Str() ) );
 }
 
 method EscapedChar($/) {
-    make Markdown::Word.new( :text( $/[0].text() ) );
+    make Markdown::Word.new( :text( $/[0].Str() ) );
 }
 
 method Entity($/) {
-    make Markdown::Html.new( :text( $/.text() ) );
+    make Markdown::Html.new( :text( $/.Str() ) );
 }
 
 method Symbol($/) {
-    make Markdown::Word.new( :text( $/.text() ) );
+    make Markdown::Word.new( :text( $/.Str() ) );
 }
 
 method Endline($/) {
-    make Markdown::Word.new( :text( $/.text() ) );
+    make Markdown::Word.new( :text( $/.Str() ) );
 }
 
-method Str($/) {
-    make Markdown::Word.new( :text( $/.text() ) );
+method String($/) {
+    make Markdown::Word.new( :text( $/.Str() ) );
 }
 
 method Space($/) {
-    make Markdown::Space.new( :text( $/.text() ) );
+    make Markdown::Space.new( :text( $/.Str() ) );
 }
 
 method Smart($/, $key) {
@@ -408,7 +408,7 @@ method Smart($/, $key) {
 
 method Apostrophe($/) {
 #    if ( $/.is_strict() ) {
-        make Markdown::Word.new( :text( $/.text() ) );
+        make Markdown::Word.new( :text( $/.Str() ) );
 #    }
 #    else {
 #        make Markdown::Html.new( :text( '&rsquo;' ) );
@@ -417,7 +417,7 @@ method Apostrophe($/) {
 
 method Ellipsis($/) {
     if ( $/.is_strict() ) {
-        make Markdown::Word.new( :text( $/.text() ) );
+        make Markdown::Word.new( :text( $/.Str() ) );
     }
     else {
         make Markdown::Html.new( :text( '&hellip;' ) );
@@ -430,7 +430,7 @@ method Dash($/, $key) {
 
 method EnDash($/) {
 #    if ( $/.is_strict() ) {
-        make Markdown::Word.new( :text( $/.text() ) );
+        make Markdown::Word.new( :text( $/.Str() ) );
 #    }
 #    else {
 #        make Markdown::Html.new( :text( '&ndash;' ) );
@@ -439,7 +439,7 @@ method EnDash($/) {
 
 method EmDash($/) {
     if ( $/.is_strict() ) {
-        make Markdown::Word.new( :text( $/.text() ) );
+        make Markdown::Word.new( :text( $/.Str() ) );
     }
     else {
         make Markdown::Html.new( :text( '&mdash;' ) );
@@ -447,7 +447,7 @@ method EmDash($/) {
 }
 
 method DoubleQuoted($/) {
-    make Markdown::Line.new( :text( $/.text() ) );
+    make Markdown::Line.new( :text( $/.Str() ) );
 }
 
 # Local Variables:
