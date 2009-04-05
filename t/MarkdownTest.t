@@ -36,12 +36,31 @@ else {
 
 $ENV{MARKDOWN_STRICT} = 'NO_EXT';
 
+my %skip = map { $_ => 'skip' } (
+    14,
+);
+
+my %todo = map { $_ => 'todo' } (
+    4,
+    14,
+    15,
+    16,
+    19
+);
+
+my $idx = 0;
 foreach my $test_file (@test_files) {
+    $idx += 1;
     my $test_name = basename($test_file, '.text');
 
-    my $code = Parrot::Test::slurp_file( $test_file ) . "\n";
-    my $out = Parrot::Test::slurp_file(File::Spec->catfile( @dir, "$test_name.html" )) ;
-    language_output_is( 'markdown', $code, $out, $test_name );
+SKIP:
+    {
+        skip($test_name, 1) if (exists $skip{$idx});
+        my $code = Parrot::Test::slurp_file( $test_file ) . "\n";
+        my $out = Parrot::Test::slurp_file(File::Spec->catfile( @dir, "$test_name.html" )) ;
+        my @todo = (exists $todo{$idx}) ? ( 'todo', $test_name ) : ();
+        language_output_is( 'markdown', $code, $out, $test_name, @todo );
+    }
 }
 
 
