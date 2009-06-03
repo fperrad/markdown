@@ -22,55 +22,55 @@ class Markdown::Grammar::Actions;
 method TOP($/) {
     my $mast := Markdown::Document.new();
     for $<Block> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
 
 method Block($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method Para($/) {
     my $mast := Markdown::Para.new();
     for $<Inlines><_Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
 
 method Heading($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method AtxHeading($/) {
     my $mast := Markdown::Title.new( :level( ~$<AtxStart>.length() ) );
     for $<AtxInline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
 
 method AtxInline($/) {
-    make $( $<Inline> );
+    make $<Inline>.ast();
 }
 
 method _Inline($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method Inline($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method SetextHeading($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method SetextHeading1($/) {
     my $mast := Markdown::Title.new( :level( 1 ) );
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -78,7 +78,7 @@ method SetextHeading1($/) {
 method SetextHeading2($/) {
     my $mast := Markdown::Title.new( :level( 2 ) );
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -86,7 +86,7 @@ method SetextHeading2($/) {
 method BlockQuote($/) {
     my $mast := Markdown::BlockQuote.new();
     for $<BlockQuoteChunk> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -98,7 +98,7 @@ method BlockQuoteChunk($/) {
         unless ( $first ) {
             $mast.push( Markdown::Newline.new() );
         }
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
         $first := 0;
     }
     make $mast;
@@ -106,10 +106,10 @@ method BlockQuoteChunk($/) {
 
 method BlockQuoteLine($/) {
     my $mast := Markdown::Node.new();
-    $mast.push( $( $<BlockQuoteFirstLine> ) );
+    $mast.push( $<BlockQuoteFirstLine>.ast() );
     for $<BlockQuoteNextLine> {
         $mast.push( Markdown::Newline.new() );
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -117,7 +117,7 @@ method BlockQuoteLine($/) {
 method BlockQuoteFirstLine($/) {
     my $mast := Markdown::Node.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -125,7 +125,7 @@ method BlockQuoteFirstLine($/) {
 method BlockQuoteNextLine($/) {
     my $mast := Markdown::Node.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -146,10 +146,10 @@ method NonblankIndentedLine($/) {
 method VerbatimChunk($/) {
     my $mast := Markdown::Node.new();
     for $<BlankLine> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     for $<NonblankIndentedLine> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -157,7 +157,7 @@ method VerbatimChunk($/) {
 method Verbatim($/) {
     my $mast := Markdown::CodeBlock.new();
     for $<VerbatimChunk> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -167,13 +167,13 @@ method HorizontalRule($/) {
 }
 
 method BulletList($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method BulletListTight($/) {
     my $mast := Markdown::ItemizedList.new();
     for $<BulletListItem> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -181,7 +181,7 @@ method BulletListTight($/) {
 method BulletListLoose($/) {
     my $mast := Markdown::ItemizedList.new();
     for $<BulletListItem> {
-        my $item := $( $_ );
+        my $item := $_.ast();
         $item.loose( 1 );
         $mast.push( $item );
     }
@@ -189,54 +189,54 @@ method BulletListLoose($/) {
 }
 
 method BulletListItem($/) {
-    make $( $<ListItem> );
+    make $<ListItem>.ast();
 }
 
 method ListItem($/) {
     if ( $<ListContinuationBlock> ) {
-        my $mast := Markdown::ListItem.new( $( $<ListBlock> ) );
+        my $mast := Markdown::ListItem.new( $<ListBlock>.ast() );
         for $<ListContinuationBlock> {
-            $mast.push( $( $_ ) );
+            $mast.push( $_.ast() );
         }
         make $mast;
     }
     else {
-        make Markdown::ListItem.new( $( $<ListBlock> ) );
+        make Markdown::ListItem.new( $<ListBlock>.ast() );
     }
 }
 
 method ListBlock($/) {
     my $mast := Markdown::Node.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     for $<ListBlockLine> {
         $mast.push( Markdown::Newline.new() );
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
 
 method ListBlockLine($/) {
-    make $( $<OptionallyIndentedLine><Line> );
+    make $<OptionallyIndentedLine><Line>.ast();
 }
 
 method ListContinuationBlock($/) {
     my $mast := Markdown::Node.new();
     for $<ListBlock> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
 
 method OrderedList($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method OrderedListTight($/) {
     my $mast := Markdown::OrderedList.new();
     for $<OrderedListItem> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -244,7 +244,7 @@ method OrderedListTight($/) {
 method OrderedListLoose($/) {
     my $mast := Markdown::OrderedList.new();
     for $<OrderedListItem> {
-        my $item := $( $_ );
+        my $item := $_.ast();
         $item.loose( 1 );
         $mast.push( $item );
     }
@@ -252,7 +252,7 @@ method OrderedListLoose($/) {
 }
 
 method OrderedListItem($/) {
-    make $( $<ListItem> );
+    make $<ListItem>.ast();
 }
 
 method HtmlBlock($/) {
@@ -261,68 +261,68 @@ method HtmlBlock($/) {
 }
 
 method Emph($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method EmphStar($/) {
     my $mast := Markdown::Emphasis.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
-    $mast.push( $( $<OneStarClose><Inline> ) );
+    $mast.push( $<OneStarClose><Inline>.ast() );
     make $mast;
 }
 
 method EmphUI($/) {
     my $mast := Markdown::Emphasis.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
-    $mast.push( $( $<OneUIClose><Inline> ) );
+    $mast.push( $<OneUIClose><Inline>.ast() );
     make $mast;
 }
 
 method Strong($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method StrongStar($/) {
     my $mast := Markdown::Strong.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
-    $mast.push( $( $<TwoStarClose><Inline> ) );
+    $mast.push( $<TwoStarClose><Inline>.ast() );
     make $mast;
 }
 
 method StrongUI($/) {
     my $mast := Markdown::Strong.new();
     for $<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
-    $mast.push( $( $<TwoUIClose><Inline> ) );
+    $mast.push( $<TwoUIClose><Inline>.ast() );
     make $mast;
 }
 
 method Image($/, $key) {
-    my $mast := $( $/{$key} );
+    my $mast := $/{$key}.ast();
     $mast.image( '1' );
     make $mast;
 }
 
 method Link($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method ReferenceLink($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method ReferenceLinkDouble($/) {
     my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].Str() ),
                                        :text( $/.Str() ) );
     for $<Label>[0]<Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
@@ -336,13 +336,13 @@ method ExplicitLink($/) {
     my $mast := Markdown::Link.new( :title( ~$<Title>[0].Str() ),
                                     :url( ~$<Source><SourceContents>.Str() ) );
     for $<Label><Inline> {
-        $mast.push( $( $_ ) );
+        $mast.push( $_.ast() );
     }
     make $mast;
 }
 
 method AutoLink($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method AutoLinkUrl($/) {
@@ -366,7 +366,7 @@ method Code($/) {
 }
 
 method RawHtml($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method HtmlComment($/) {
@@ -403,7 +403,7 @@ method Space($/) {
 }
 
 method Smart($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method Apostrophe($/) {
@@ -425,7 +425,7 @@ method Ellipsis($/) {
 }
 
 method Dash($/, $key) {
-    make $( $/{$key} );
+    make $/{$key}.ast();
 }
 
 method EnDash($/) {
