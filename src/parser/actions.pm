@@ -44,7 +44,7 @@ method Heading($/, $key) {
 }
 
 method AtxHeading($/) {
-    my $mast := Markdown::Title.new( :level( ~$<AtxStart>.length() ) );
+    my $mast := Markdown::Title.new( :level( $<AtxStart>.length() ) );
     for $<AtxInline> {
         $mast.push( $_.ast() );
     }
@@ -131,7 +131,7 @@ method BlockQuoteNextLine($/) {
 }
 
 method Line($/) {
-    make Markdown::Line.new( :text( ~$<RawLine>[0] ) );
+    make Markdown::Line.new( :text( $<RawLine>[0].Str() ) );
 }
 
 method BlankLine($/) {
@@ -139,7 +139,7 @@ method BlankLine($/) {
 }
 
 method NonblankIndentedLine($/) {
-    make Markdown::Line.new( :text( ~$<IndentedLine><Line><RawLine>.Str() ),
+    make Markdown::Line.new( :text( $<IndentedLine><Line><RawLine>.Str() ),
                              :detab( 1 ) );
 }
 
@@ -319,7 +319,7 @@ method ReferenceLink($/, $key) {
 }
 
 method ReferenceLinkDouble($/) {
-    my $mast := Markdown::RefLink.new( :key( ~$<Label>[1].Str() ),
+    my $mast := Markdown::RefLink.new( :key( $<Label>[1].Str() ),
                                        :text( $/.Str() ) );
     for $<Label>[0]<Inline> {
         $mast.push( $_.ast() );
@@ -328,13 +328,13 @@ method ReferenceLinkDouble($/) {
 }
 
 method ReferenceLinkSingle($/) {
-    make Markdown::RefLink.new( :key( ~$<Label>.Str() ),
+    make Markdown::RefLink.new( :key( $<Label>.Str() ),
                                 :text( $/.Str() ) );
 }
 
 method ExplicitLink($/) {
-    my $mast := Markdown::Link.new( :title( ~$<Title>[0].Str() ),
-                                    :url( ~$<Source><SourceContents>.Str() ) );
+    my $mast := Markdown::Link.new( :title( $<Title>[0].Str() ),
+                                    :url( $<Source><SourceContents>.Str() ) );
     for $<Label><Inline> {
         $mast.push( $_.ast() );
     }
@@ -357,7 +357,7 @@ method AutoLinkEmail($/) {
 
 method Reference($/) {
     my $mast := Markdown::Reference.new( );
-    $mast.insert( ~$<Label>.Str(), ~$<RefSrc>.Str(), ~$<RefTitle>[0].Str() );
+    $mast.insert( $<Label>.Str(), $<RefSrc>.Str(), $<RefTitle>[0].Str() );
     make $mast
 }
 
