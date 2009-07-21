@@ -104,7 +104,7 @@ Markdown::HTML::Compiler implements a compiler for MAST nodes.
     if $S1 == '@' goto L_dec
     if $S1 == ':' goto L_raw
     .local pmc rand
-    rand = get_hll_global [ 'Math'; 'Rand' ], 'rand'
+    rand = get_root_global [ 'parrot'; 'Math'; 'Rand' ], 'rand'
     $I0 = rand()
     # roughly 10% raw, 45% hex, 45% dec
     $I0 %= 20
