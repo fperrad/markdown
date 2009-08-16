@@ -1,2 +1,9 @@
-Language 'Markdown' was created with tools/dev/mk_language_shell.pl, r28657.
+
+Markdown on Parrot
+==================
+
+This is the port of the Markdown (http://daringfireball.net/projects/markdown/)
+a lightweight markup language, on the Parrot VM (http://www.parrot.org).
+
+This port uses the PCT (Parrot Compiler Toolkit).
 
