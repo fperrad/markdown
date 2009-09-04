@@ -45,11 +45,12 @@ foreach my $func ( keys %language_test_map ) {
 
         my $params = $options{params} || q{};
 
+        my $parrot = File::Spec->catfile( $self->{relpath}, $self->{parrot} );
         # flatten filenames (don't use directories)
         my $lang_fn = File::Spec->rel2abs( Parrot::Test::per_test( '.text', $count ) );
         my $out_fn = File::Spec->rel2abs( Parrot::Test::per_test( '.html', $count ) );
         my @test_prog = (
-            "$self->{parrot} languages/markdown/markdown.pbc $lang_fn",
+            "$parrot markdown.pbc $lang_fn",
         );
 
         # This does not create byte code, but lua code
@@ -59,7 +60,6 @@ foreach my $func ( keys %language_test_map ) {
         # STDERR is written into same output file
         my $exit_code = Parrot::Test::run_command(
             \@test_prog,
-            CD     => $self->{relpath},
             STDOUT => $out_fn,
             STDERR => $out_fn,
         );
