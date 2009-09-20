@@ -57,7 +57,6 @@ BUILD_CLEANUPS := \
   "src/gen_*.pir" \
   "*.c" \
   "*$(O)" \
-  markdown@exe@ \
 #IF(win32):  parrot-markdown.exe \
 #IF(win32):  parrot-markdown.iss \
 #IF(win32):  "setup-parrot-*.exe" \
@@ -71,16 +70,13 @@ TEST_CLEANUPS := \
 # the default target
 build: markdown/markdown.pbc markdown.pbc
 
-all: build markdown@exe@ installable
+all: build installable
 
 markdown/markdown.pbc: $(SOURCES)
 	$(PARROT) $(PARROT_ARGS) -o markdown/markdown.pbc src/Compiler.pir
 
 markdown.pbc: markdown.pir
 	$(PARROT) $(PARROT_ARGS) -o markdown.pbc markdown.pir
-
-markdown@exe@: markdown.pbc
-	$(PBC_TO_EXE) markdown.pbc
 
 src/gen_grammar.pir: $(PERL6GRAMMAR) src/parser/grammar.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
@@ -109,8 +105,7 @@ help:
 	@echo ""
 	@echo "  build:             markdown.pbc"
 	@echo "                     This is the default."
-	@echo "  markdown@exe@       Self-hosting binary not to be installed."
-	@echo "  all:               markdown.pbc markdown@exe@ installable"
+	@echo "  all:               markdown.pbc installable"
 	@echo "  installable:       Create libs and self-hosting binaries to be installed."
 	@echo "  install:           Install the installable targets and docs."
 	@echo ""

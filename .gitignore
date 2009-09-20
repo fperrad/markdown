@@ -6,7 +6,6 @@ Makefile
 *.obj
 *.exe
 *.iss
-markdown
 installable_markdown
 
 *.sto
