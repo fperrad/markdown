@@ -42,8 +42,7 @@ SOURCES := \
   src/Node.pir \
   src/gen_grammar.pir \
   src/gen_actions.pir \
-  src/gen_builtins.pir \
-  markdown.pir
+  src/gen_builtins.pir
 
 BUILTINS_PIR := \
   src/builtins/is_strict.pir \
@@ -53,6 +52,7 @@ DOCS := README
 
 BUILD_CLEANUPS := \
   man \
+  markdown/markdown.pbc \
   markdown.pbc \
   "src/gen_*.pir" \
   "*.c" \
@@ -69,11 +69,14 @@ TEST_CLEANUPS := \
   "t/*.text"
 
 # the default target
-build: markdown.pbc
+build: markdown/markdown.pbc markdown.pbc
 
 all: build markdown@exe@ installable
 
-markdown.pbc: $(SOURCES)
+markdown/markdown.pbc: $(SOURCES)
+	$(PARROT) $(PARROT_ARGS) -o markdown/markdown.pbc src/Compiler.pir
+
+markdown.pbc: markdown.pir
 	$(PARROT) $(PARROT_ARGS) -o markdown.pbc markdown.pir
 
 markdown@exe@: markdown.pbc
@@ -175,7 +178,7 @@ install: installable
 	$(CP) installable_markdown@exe@ $(BIN_DIR)/parrot-markdown@exe@
 	$(CHMOD) 0755 $(BIN_DIR)/parrot-markdown@exe@
 	-$(MKPATH) $(LIB_DIR)/languages/markdown
-	$(CP) markdown.pbc $(LIB_DIR)/languages/markdown/markdown.pbc
+	$(CP) markdown/markdown.pbc $(LIB_DIR)/languages/markdown/markdown.pbc
 	-$(MKPATH) $(MANDIR)/man1
 	$(POD2MAN) markdown.pir > $(MANDIR)/man1/parrot-markdown.1
 	-$(MKPATH) $(DOC_DIR)/languages/markdown

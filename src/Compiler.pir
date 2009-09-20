@@ -1,11 +1,68 @@
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
+=head1 Markdown::Compiler
+
+=head2 Functions & Methods
+=over 4
+
+=item onload()
+
+Creates the Markdown compiler using a C<PCT::HLLCompiler>
+object.
+
+=cut
+
+.namespace [ 'Markdown';'Compiler' ]
+
+.sub 'onload' :anon :load :init
+    load_bytecode 'PCT.pbc'
+
+    .local pmc p6meta
+    p6meta = new 'P6metaclass'
+    $P0 = p6meta.'new_class'('Markdown::Compiler', 'parent'=>'PCT::HLLCompiler')
+    $P1 = $P0.'new'()
+    $P1.'language'('markdown')
+    $P1.'parsegrammar'('Markdown::Grammar')
+    $P1.'parseactions'('Markdown::Grammar::Actions')
+    $P1.'removestage'('post')
+    $P1.'addstage'('html', 'before' => 'pir')
+.end
+
+=item html(source [, adverbs :slurpy :named])
+
+Transform MAST C<source> into a String containing HTML.
+
+=cut
+
+.sub 'html' :method
+    .param pmc source
+    .param pmc adverbs         :slurpy :named
+
+    $P0 = new ['Markdown';'HTML';'Compiler']
+    .tailcall $P0.'to_html'(source, adverbs :flat :named)
+.end
+
+
+.sub 'pir' :method
+    .param pmc source
+    .param pmc adverbs         :slurpy :named
+
+    new $P0, 'CodeString'
+    $P0 = <<'PIRCODE'
+.sub 'main' :anon
+    $S0 = <<'PIR'
+PIRCODE
+    $P0 .= source
+    $P0 .= <<'PIRCODE'
+PIR
+    .return ($S0)
+.end
+PIRCODE
+    .return ($P0)
+.end
+
 =head1 Markdown::HTML::Compiler - MAST Compiler
-
-=head2 Description
-
-Markdown::HTML::Compiler implements a compiler for MAST nodes.
 
 =head2 Methods
 
@@ -590,6 +647,12 @@ Return generated HTML for all of its children.
 =back
 
 =cut
+
+.include 'src/gen_grammar.pir'
+.include 'src/gen_actions.pir'
+.include 'src/gen_builtins.pir'
+.include 'src/Node.pir'
+
 
 # Local Variables:
 #   mode: pir

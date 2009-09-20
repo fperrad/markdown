@@ -7,14 +7,14 @@
 
 as a command line (without interactive mode) :
 
-    $ parrot markdown.pbc document.text
-    $ parrot markdown.pbc --target=parse document.text
-                                   PAST
-                                   HTML
+    $ parrot-markdown document.text
+    $ parrot-markdown --target=parse document.text
+                               PAST
+                               HTML
 
 or as a library from PIR code :
 
-     load_bytecode 'markdown.pbc'
+     load_language 'markdown'
      $P0 = compreg 'markdown'
      $S0 = <<'MARKDOWN'
  Title
@@ -38,79 +38,10 @@ or as a compiler from Rakudo :
 
 =head2 Description
 
-This is the base file for the Markdown compiler.
-
-This file includes the parsing and grammar rules from
-the src/ directory, loads the relevant PGE libraries,
-and registers the compiler under the name 'Markdown'.
-
-=head3 Functions
-
-=over 4
-
-=item onload()
-
-Creates the Markdown compiler using a C<PCT::HLLCompiler>
-object.
+This is the entry file for the Markdown compiler.
 
 =cut
 
-.namespace [ 'Markdown';'Compiler' ]
-
-.sub 'onload' :anon :load :init
-    load_bytecode 'PCT.pbc'
-
-    .local pmc p6meta
-    p6meta = new 'P6metaclass'
-    $P0 = p6meta.'new_class'('Markdown::Compiler', 'parent'=>'PCT::HLLCompiler')
-    $P1 = $P0.'new'()
-    $P1.'language'('markdown')
-    $P1.'parsegrammar'('Markdown::Grammar')
-    $P1.'parseactions'('Markdown::Grammar::Actions')
-    $P1.'removestage'('post')
-    $P1.'addstage'('html', 'before' => 'pir')
-.end
-
-=item html(source [, adverbs :slurpy :named])
-
-Transform MAST C<source> into a String containing HTML.
-
-=cut
-
-.sub 'html' :method
-    .param pmc source
-    .param pmc adverbs         :slurpy :named
-
-    $P0 = new ['Markdown';'HTML';'Compiler']
-    .tailcall $P0.'to_html'(source, adverbs :flat :named)
-.end
-
-
-.sub 'pir' :method
-    .param pmc source
-    .param pmc adverbs         :slurpy :named
-
-    new $P0, 'CodeString'
-    $P0 = <<'PIRCODE'
-.sub 'main' :anon
-    $S0 = <<'PIR'
-PIRCODE
-    $P0 .= source
-    $P0 .= <<'PIRCODE'
-PIR
-    .return ($S0)
-.end
-PIRCODE
-    .return ($P0)
-.end
-
-
-=item main(args :slurpy)  :main
-
-Start compilation by passing any command line C<args>
-to the Markdown compiler.
-
-=cut
 
 .sub 'main' :main
     .param pmc args
@@ -118,6 +49,7 @@ to the Markdown compiler.
     load_bytecode 'dumper.pbc'
     load_bytecode 'PGE/Dumper.pbc'
 
+    load_language 'markdown'
     $P0 = compreg 'markdown'
 
     .local pmc opts
@@ -127,15 +59,6 @@ to the Markdown compiler.
     print $P1
 .end
 
-
-.include 'src/gen_grammar.pir'
-.include 'src/gen_actions.pir'
-.include 'src/gen_builtins.pir'
-.include 'src/Compiler.pir'
-.include 'src/Node.pir'
-
-
-=back
 
 =head2 See Also
 
