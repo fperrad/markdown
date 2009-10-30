@@ -22,7 +22,7 @@
             "type" : "repository"
         },
         "configure": {
-            "type" : "perl5_configure",
+            "type" : "perl5_configure"
         },
         "build"    : {
             "type" : "make"
