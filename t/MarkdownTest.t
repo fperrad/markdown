@@ -41,6 +41,7 @@ Run the tests of the official test suite.
     $I0 = test_files
     if $I0 > 0 goto L3
   _handler:
+    # skip_all("no MarkdownTest")
     print "1..0"
     print " # SKIP "
     print "no MarkdownTest"

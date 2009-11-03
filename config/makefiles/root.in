@@ -62,9 +62,7 @@ BUILD_CLEANUPS := \
   installable_markdown@exe@
 
 TEST_CLEANUPS := \
-  t/MarkdownTest_1.0 \
-  "t/*.html" \
-  "t/*.text"
+  t/MarkdownTest_1.0
 
 # the default target
 build: markdown/markdown.pbc markdown.pbc
