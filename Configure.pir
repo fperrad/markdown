@@ -25,7 +25,9 @@
     config['macosx_deployment_target'] = $S0
 
     # Here, do the job
+    push_eh _handler
     genfile('config/makefiles/root.in', 'Makefile', config)
+    pop_eh
 
     # Give the user a hint of next action
     .local string make
@@ -40,6 +42,17 @@
     print make
     print " test' to run the Markdown test suite.\n"
     print "\nHappy Hacking.\n"
+    end
+
+  _handler:
+    .local pmc e
+    .local string msg
+    .get_results (e)
+    printerr "\n"
+    msg = e
+    printerr msg
+    printerr "\n"
+    end
 .end
 
 
@@ -51,25 +64,52 @@
     $S0 = subst_config($S0, config)
     $S0 = subst_slash($S0)
     output(outfile, $S0)
-    print "\n\tGenerating '"
-    print outfile
-    print "'\n\n"
+    printerr "\n\tGenerating '"
+    printerr outfile
+    printerr "'\n\n"
 .end
 
 .sub 'slurp'
     .param string filename
     $P0 = new 'FileHandle'
+    push_eh _handler
     $S0 = $P0.'readall'(filename)
+    pop_eh
     .return ($S0)
+  _handler:
+    .local pmc e
+    .get_results (e)
+    $S0 = "Can't open '"
+    $S0 .= filename
+    $S0 .= "' ("
+    $S1 = err
+    $S0 .= $S1
+    $S0 .= ")\n"
+    e = $S0
+    rethrow e
 .end
 
 .sub 'output'
     .param string filename
     .param string content
     $P0 = new 'FileHandle'
+    push_eh _handler
     $P0.'open'(filename, 'w')
+    pop_eh
     $P0.'puts'(content)
     $P0.'close'()
+    .return ()
+  _handler:
+    .local pmc e
+    .get_results (e)
+    $S0 = "Can't open '"
+    $S0 .= filename
+    $S0 .= "' ("
+    $S1 = err
+    $S0 .= $S1
+    $S0 .= ")\n"
+    e = $S0
+    rethrow e
 .end
 
 .sub 'subst_config'
@@ -100,9 +140,9 @@
     $S0 .= $S2
     goto L6
   L5:
-    print "unknown config: "
-    print $S1
-    print "\n"
+    printerr "\tunknown config: "
+    printerr $S1
+    printerr "\n"
   L6:
     $I0 = $I3 + 1
     goto L3
