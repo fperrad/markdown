@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,38 +6,53 @@
 
 =head2 Synopsis
 
-    % perl t/23-entity.t
+    % parrot t/23-entity.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 2;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'CharEntity' );
+    plan(2)
+
+    test_CharEntity()
+    test_HexEntity()
+.end
+
+.sub 'test_CharEntity'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 4 &lt; 5
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'CharEntity')
 <p>4 &lt; 5</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'HexEntity' );
+.sub 'test_HexEntity'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 20 &#x20ac;.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'HexEntity')
 <p>20 &#x20ac;.</p>
-OUT
+HTML
+.end
 
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

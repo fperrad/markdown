@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2009, Parrot Foundation.
 # $Id$
 
@@ -6,38 +6,53 @@
 
 =head2 Synopsis
 
-    % perl t/31-link.t
+    % parrot t/31-link.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 2;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'inline link' );
+    plan(2)
+
+    test_inline_link()
+    test_inline_link_with_title()
+.end
+
+.sub 'test_inline_link'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 This is an [example link](http://example.com/).
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'inline link')
 <p>This is an <a href="http://example.com/">example link</a>.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'inline link with title' );
+.sub 'test_inline_link_with_title'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 This is an [example link](http://example.com/ "With a Title").
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'inline link with title')
 <p>This is an <a href="http://example.com/" title="With a Title">example link</a>.</p>
-OUT
+HTML
+.end
 
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

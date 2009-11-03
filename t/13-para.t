@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,44 +6,59 @@
 
 =head2 Synopsis
 
-    % perl t/13-para.t
+    % parrot t/13-para.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 2;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'Para 1' );
+    plan(2)
+
+    test_Para1()
+    test_ParaMultiLine()
+.end
+
+.sub 'test_Para1'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 This is a paragraph. It has two sentences.
 
 This is another paragraph. It also has two sentences.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'Para 1')
 <p>This is a paragraph. It has two sentences.</p>
 
 <p>This is another paragraph. It also has two sentences.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'Para multi-line' );
+.sub 'test_ParaMultiLine'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 This is a paragraph.
 It has two sentences.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'Para multi-line')
 <p>This is a paragraph.
 It has two sentences.</p>
-OUT
+HTML
+.end
 
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

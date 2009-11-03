@@ -122,10 +122,10 @@ help:
 	@echo ""
 
 test: build
-	$(PERL) -I$(LIB_DIR)/tools/lib t/harness
+	prove t//*.t
 
 spectest: build t/MarkdownTest_1.0
-	$(PERL) -I$(LIB_DIR)/tools/lib t/harness
+	prove t//*.t
 
 t/MarkdownTest_1.0.zip:
 	cd t && perl -MLWP::Simple -e "getstore(q{http:////daringfireball.net//projects//downloads//MarkdownTest_1.0.zip}, q{MarkdownTest_1.0.zip});"
@@ -136,8 +136,8 @@ t/MarkdownTest_1.0: t/MarkdownTest_1.0.zip
 codetest: codetest-c codetest-make codetest-perl codetest-pir codetest-pod
 
 T_MAKE  := config//makefiles//root.in
-T_PERL  := Configure.pl t//harness t//*.t t//Parrot//Test//*.pm
-T_PIR   := markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir
+T_PERL  := Configure.pl
+T_PIR   := markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir t//*.t
 
 codetest-c:
 
@@ -155,16 +155,13 @@ codetest-perl:
 	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_PERL)
 	- $(PROVE) @build_dir@/t/codingstd/perlcritic.t $(T_PERL)
 	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_PERL)
-	- $(PROVE) @build_dir@/t/codingstd/pod_syntax.t $(T_PERL)
 
 codetest-pir:
 	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_PIR)
 	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_PIR)
-	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_PIR)
 	- $(PROVE) @build_dir@/t/codingstd/pir_code_coda.t $(T_PIR)
 	- $(PROVE) @build_dir@/t/codingstd/tabs.t $(T_PIR)
 	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_PIR)
-	- $(PROVE) @build_dir@/t/codingstd/pod_syntax.t $(T_PIR)
 
 codetest-pod:
 

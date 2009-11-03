@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2009, Parrot Foundation.
 # $Id$
 
@@ -6,19 +6,25 @@
 
 =head2 Synopsis
 
-    % perl t/16-blockhtml.t
+    % parrot t/16-blockhtml.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 3;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'HTML table' );
+    plan(3)
+
+    test_HTML_table()
+    test_comments()
+    test_hr()
+.end
+
+.sub 'test_HTML_table'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 This is a regular paragraph.
 
@@ -31,7 +37,10 @@ This is a regular paragraph.
 
 This is another regular paragraph.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'HTML table')
 <p>This is a regular paragraph.</p>
 
 <table>
@@ -42,34 +51,47 @@ CODE
 </table>
 
 <p>This is another regular paragraph.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'comments' );
+.sub 'test_comments'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 <!--
     multiline
     comment
 -->
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'comments')
 <!--
     multiline
     comment
 -->
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'hr' );
+.sub 'test_hr'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 <hr size=12 />
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'hr')
 <hr size=12 />
-OUT
+HTML
+.end
 
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

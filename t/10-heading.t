@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,55 +6,84 @@
 
 =head2 Synopsis
 
-    % perl t/10-heading.t
+    % parrot t/10-heading.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 4;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'SetextHeading1' );
+    plan(4)
+
+    test_SetextHeading1()
+    test_SetextHeading2()
+    test_AtxHeading1()
+    test_AtxHeading4()
+.end
+
+.sub 'test_SetextHeading1'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 First-level heading
 ===================
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'SetextHeading 1')
 <h1>First-level heading</h1>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'SetextHeading2' );
+.sub 'test_SetextHeading2'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 Second-level heading
 --------------------
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'SetextHeading 2')
 <h2>Second-level heading</h2>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'AtxHeading 1' );
+.sub 'test_AtxHeading1'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 # First-level heading
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'AtxHeading 1')
 <h1>First-level heading</h1>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'AtxHeading 4' );
+.sub 'test_AtxHeading4'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 #### Fourth-level heading ####
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'AtxHeading 4')
 <h4>Fourth-level heading</h4>
-OUT
+HTML
+.end
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

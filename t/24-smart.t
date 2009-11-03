@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,62 +6,91 @@
 
 =head2 Synopsis
 
-    % perl t/24-smart.t
+    % parrot t/24-smart.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 2;
-use Test::More;
+    .include 'test_more.pir'
 
-#language_output_is( 'markdown', <<'CODE', <<'OUT', 'apostrophe' );
-#
-#smart '
-#
-#CODE
-#<p>smart &rsquo;</p>
-#OUT
+    plan(2)
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'ellipsis' );
+#    test_apostrophe()
+    test_ellipsis()
+#    test_endash()
+    test_emdash()
+.end
+
+.sub 'test_apostrophe'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
+
+smart '
+
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'apostrophe')
+<p>smart &rsquo;</p>
+HTML
+.end
+
+.sub 'test_ellipsis'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 smart ...
 
 smart . . .
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'ellipsis')
 <p>smart &hellip;</p>
 
 <p>smart &hellip;</p>
-OUT
+HTML
+.end
 
-#language_output_is( 'markdown', <<'CODE', <<'OUT', 'endash' );
-#
-#smart -
-#
-#CODE
-#<p>smart &ndash;</p>
-#OUT
+.sub 'test_endash'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'emdash' );
+smart -
+
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'endash')
+<p>smart &ndash;</p>
+HTML
+.end
+
+.sub 'test_emdash'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 smart --
 
 smart ---
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'emdash')
 <p>smart &mdash;</p>
 
 <p>smart &mdash;</p>
-OUT
+HTML
+.end
 
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

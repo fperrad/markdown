@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,45 +6,68 @@
 
 =head2 Synopsis
 
-    % perl t/22-escape.t
+    % parrot t/22-escape.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 3;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'asterisk' );
+    plan(3)
+
+    test_asterick()
+    test_dot()
+    test_symbol()
+.end
+
+.sub 'test_asterick'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 \*literal astericks\*
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'asterick')
 <p>*literal astericks*</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'dot' );
+.sub 'test_dot'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 1986\. What a great season.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'dot')
 <p>1986. What a great season.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'symbol (not escaped)' );
+.sub 'test_symbol'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 Hello, World!
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'symbol (not escaped)')
 <p>Hello, World!</p>
-OUT
+HTML
+.end
+
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

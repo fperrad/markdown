@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,73 +6,117 @@
 
 =head2 Synopsis
 
-    % perl t/21-code.t
+    % parrot t/21-code.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 6;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'code' );
+    plan(6)
+
+    test_code()
+    test_printf()
+    test_literal_backtick()
+    test_with_space()
+    test_HTML_tag()
+    test_HTML_entity()
+.end
+
+.sub 'test_code'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 `code`
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'code')
 <p><code>code</code></p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'printf' );
+.sub 'test_printf'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 Use the `printf()` function.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'printf')
 <p>Use the <code>printf()</code> function.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'literal backtick' );
+.sub 'test_literal_backtick'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 ``There is a literal backtick (`) here.``
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'literal backtick')
 <p><code>There is a literal backtick (`) here.</code></p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'with space' );
+.sub 'test_with_space'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 A single backtick in a code span: `` ` ``
 
 A backtick-delimited string in a code span: `` `foo` ``
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'with space')
 <p>A single backtick in a code span: <code>`</code></p>
 
 <p>A backtick-delimited string in a code span: <code>`foo`</code></p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'HTML tag' );
+.sub 'test_HTML_tag'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 Please don't use any `<blink>` tags.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'HTML tag')
 <p>Please don't use any <code>&lt;blink&gt;</code> tags.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'HTML entity' );
+.sub 'test_HTML_entity'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 `&#8212;` is the decimal-encoded equivalent of `&mdash;`.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'HTML entity')
 <p><code>&amp;#8212;</code> is the decimal-encoded equivalent of <code>&amp;mdash;</code>.</p>
-OUT
+HTML
+.end
+
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

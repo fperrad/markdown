@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,54 +6,83 @@
 
 =head2 Synopsis
 
-    % perl t/20-emphasis.t
+    % parrot t/20-emphasis.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 4;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'emphasis star' );
+    plan(4)
+
+    test_emphasis_star()
+    test_strong_star()
+    test_emphasis_UI()
+    test_strong_UI()
+.end
+
+.sub 'test_emphasis_star'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 *emphasis* (e.g., italics)
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'emphasis star')
 <p><em>emphasis</em> (e.g., italics)</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'strong star' );
+.sub 'test_strong_star'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 **strong emphasis** (e.g., boldface)
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'strong star')
 <p><strong>strong emphasis</strong> (e.g., boldface)</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'emphasis UI' );
+.sub 'test_emphasis_UI'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 _emphasis_ (e.g., italics)
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'emphasis UI')
 <p><em>emphasis</em> (e.g., italics)</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'strong UI' );
+.sub 'test_strong_UI'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 __strong emphasis__ (e.g., boldface)
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'strong UI')
 <p><strong>strong emphasis</strong> (e.g., boldface)</p>
-OUT
+HTML
+.end
 
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+

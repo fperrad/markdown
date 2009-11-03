@@ -1,4 +1,4 @@
-#! perl
+#! parrot
 # Copyright (C) 2008-2009, Parrot Foundation.
 # $Id$
 
@@ -6,41 +6,60 @@
 
 =head2 Synopsis
 
-    % perl t/12-blockquote.t
+    % parrot t/12-blockquote.t
 
 =cut
 
-use strict;
-use warnings;
-use FindBin;
-use lib "$FindBin::Bin/../../../lib", "$FindBin::Bin";
+.sub 'main' :main
+    load_language 'markdown'
 
-use Parrot::Test tests => 4;
-use Test::More;
+    .include 'test_more.pir'
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 1' );
+    plan(4)
+
+    test_BlockQuote1()
+    test_BlockQuote2()
+    test_BlockQuote3()
+    test_BlockQuote4()
+.end
+
+.sub 'test_BlockQuote1'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 > This text will be enclosed in an HTML blockquote element.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'BlockQuote 1')
 <blockquote>
   <p>This text will be enclosed in an HTML blockquote element.</p>
 </blockquote>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 2' );
+.sub 'test_BlockQuote2'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 > Use the > character in front of a line, *just like in email*.
 > Use it if you're quoting a person, a song or whatever.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'BlockQuote 2')
 <blockquote>
   <p>Use the > character in front of a line, <em>just like in email</em>.
 Use it if you're quoting a person, a song or whatever.</p>
 </blockquote>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 3' );
+.sub 'test_BlockQuote3'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 > You can use *italic* or lists inside them also.
 And just like with other paragraphs,
@@ -49,7 +68,10 @@ part of the blockquote, even without the > character in front.
 
 To end the blockquote, just put a blank line before the following paragraph.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'BlockQuote 3')
 <blockquote>
   <p>You can use <em>italic</em> or lists inside them also.
 And just like with other paragraphs,
@@ -58,25 +80,33 @@ part of the blockquote, even without the > character in front.</p>
 </blockquote>
 
 <p>To end the blockquote, just put a blank line before the following paragraph.</p>
-OUT
+HTML
+.end
 
-language_output_is( 'markdown', <<'CODE', <<'OUT', 'BlockQuote 4' );
+.sub 'test_BlockQuote4'
+     $P0 = compreg 'markdown'
+     $S0 = <<'MARKDOWN'
 
 > Use the > character in front of a line, *just like in email*.
 
 > Use it if you're quoting a person, a song or whatever.
 
-CODE
+MARKDOWN
+     $P1 = $P0.'compile'($S0)
+     $S1 = $P1()
+     is($S1, <<'HTML', 'BlockQuote 4')
 <blockquote>
   <p>Use the > character in front of a line, <em>just like in email</em>.</p>
 
 <p>Use it if you're quoting a person, a song or whatever.</p>
 </blockquote>
-OUT
+HTML
+.end
+
 
 # Local Variables:
-#   mode: cperl
-#   cperl-indent-level: 4
+#   mode: pir
 #   fill-column: 100
 # End:
-# vim: expandtab shiftwidth=4:
+# vim: expandtab shiftwidth=4 ft=pir:
+
