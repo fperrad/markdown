@@ -31,9 +31,7 @@ RM_RF         := @rm_rf@
 POD2MAN       := pod2man
 PARROT        := $(BIN_DIR)/parrot@exe@
 PBC_TO_EXE    := $(BIN_DIR)/pbc_to_exe@exe@
-#IF(darwin):
-#IF(darwin):# MACOSX_DEPLOYMENT_TARGET must be defined for OS X compilation/linking
-#IF(darwin):export MACOSX_DEPLOYMENT_TARGET := @osx_version@
+@macosx_deployment_target@
 
 
 SOURCES := \
@@ -56,9 +54,9 @@ BUILD_CLEANUPS := \
   "src/gen_*.pir" \
   "*.c" \
   "*$(O)" \
-#IF(win32):  parrot-markdown.exe \
-#IF(win32):  parrot-markdown.iss \
-#IF(win32):  "setup-parrot-*.exe" \
+  parrot-markdown.exe \
+  parrot-markdown.iss \
+  "setup-parrot-*.exe" \
   installable_markdown@exe@
 
 TEST_CLEANUPS := \
@@ -93,7 +91,7 @@ installable_markdown@exe@: markdown.pbc
 	$(PBC_TO_EXE) markdown.pbc --install
 
 Makefile: config/makefiles/root.in
-	$(PERL) Configure.pl
+	$(PARROT) Configure.pir
 
 # This is a listing of all targets, that are meant to be called by users
 help:
@@ -134,8 +132,7 @@ t/MarkdownTest_1.0: t/MarkdownTest_1.0.zip
 codetest: codetest-c codetest-make codetest-perl codetest-pir codetest-pod
 
 T_MAKE  := config//makefiles//root.in
-T_PERL  := Configure.pl
-T_PIR   := markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir t//*.t
+T_PIR   := Configure.pir markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir t/*.t
 
 codetest-c:
 
@@ -147,12 +144,6 @@ codetest-make:
 	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_MAKE)
 
 codetest-perl:
-	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_PERL)
-	- $(PROVE) @build_dir@/t/codingstd/cuddled_else.t $(T_PERL)
-	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_PERL)
-	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_PERL)
-	- $(PROVE) @build_dir@/t/codingstd/perlcritic.t $(T_PERL)
-	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_PERL)
 
 codetest-pir:
 	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_PIR)
