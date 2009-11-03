@@ -21,7 +21,6 @@ PCT           := $(LIB_DIR)/library/PCT.pbc
 
 ## Setup some commands
 PERL          := @perl@
-PROVE         := @perl@ -I@build_dir@/lib
 CAT           := @cat@
 CHMOD         := @chmod@
 CP            := @cp@
@@ -132,25 +131,26 @@ t/MarkdownTest_1.0: t/MarkdownTest_1.0.zip
 codetest: codetest-c codetest-make codetest-perl codetest-pir codetest-pod
 
 T_MAKE  := config//makefiles//root.in
-T_PIR   := Configure.pir markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir t/*.t
+T_PIR   := markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir \
+           Configure.pir t/*.t
 
 codetest-c:
 
 codetest-make:
-	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_MAKE)
-	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_MAKE)
-	- $(PROVE) @build_dir@/t/codingstd/make_code_coda.t $(T_MAKE)
-	- $(PROVE) @build_dir@/t/codingstd/linelength.t $(T_MAKE)
-	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_MAKE)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/copyright.t $(T_MAKE)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/filenames.t $(T_MAKE)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/make_code_coda.t $(T_MAKE)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/linelength.t $(T_MAKE)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/trailing_space.t $(T_MAKE)
 
 codetest-perl:
 
 codetest-pir:
-	- $(PROVE) @build_dir@/t/codingstd/copyright.t $(T_PIR)
-	- $(PROVE) @build_dir@/t/codingstd/filenames.t $(T_PIR)
-	- $(PROVE) @build_dir@/t/codingstd/pir_code_coda.t $(T_PIR)
-	- $(PROVE) @build_dir@/t/codingstd/tabs.t $(T_PIR)
-	- $(PROVE) @build_dir@/t/codingstd/trailing_space.t $(T_PIR)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/copyright.t $(T_PIR)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/filenames.t $(T_PIR)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/pir_code_coda.t $(T_PIR)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/tabs.t $(T_PIR)
+	- $(PERL) -I@build_dir@/lib @build_dir@/t/codingstd/trailing_space.t $(T_PIR)
 
 codetest-pod:
 
