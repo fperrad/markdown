@@ -1,3 +1,4 @@
+#! /usr/local/bin/parrot
 # Copyright (C) 2009, Parrot Foundation.
 
 .include 'sysinfo.pasm'
