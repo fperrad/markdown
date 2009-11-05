@@ -17,16 +17,6 @@
     .local string OS
     OS = sysinfo .SYSINFO_PARROT_OS
 
-    # Something, we need extra configuration variables
-    $S0 = ''
-    unless OS == 'darwin' goto L1
-    # MACOSX_DEPLOYMENT_TARGET must be defined for OS X compilation/linking
-    $S0 = "export MACOSX_DEPLOYMENT_TARGET := "
-    $S1 = config['osx_version']
-    $S0 .= $S1
-  L1:
-    config['macosx_deployment_target'] = $S0
-
     # Here, do the job
     push_eh _handler
     genfile('config/makefiles/root.in', 'Makefile', config)

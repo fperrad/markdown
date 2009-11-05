@@ -30,7 +30,9 @@ RM_RF         := @rm_rf@
 POD2MAN       := pod2man
 PARROT        := $(BIN_DIR)/parrot@exe@
 PBC_TO_EXE    := $(BIN_DIR)/pbc_to_exe@exe@
-@macosx_deployment_target@
+#IF(darwin):
+#IF(darwin):# MACOSX_DEPLOYMENT_TARGET must be defined for OS X compilation/linking
+#IF(darwin):export MACOSX_DEPLOYMENT_TARGET := @osx_version@
 
 
 SOURCES := \
@@ -53,9 +55,9 @@ BUILD_CLEANUPS := \
   "src/gen_*.pir" \
   "*.c" \
   "*$(O)" \
-  parrot-markdown.exe \
-  parrot-markdown.iss \
-  "setup-parrot-*.exe" \
+#IF(win32):  parrot-markdown.exe \
+#IF(win32):  parrot-markdown.iss \
+#IF(win32):  "setup-parrot-*.exe" \
   installable_markdown@exe@
 
 TEST_CLEANUPS := \
