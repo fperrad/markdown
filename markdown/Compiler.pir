@@ -648,8 +648,8 @@ Return generated HTML for all of its children.
 
 =cut
 
-.include 'markdown/gen_grammar.pir'
-.include 'markdown/gen_actions.pir'
+.include 'markdown/grammar_gen.pir'
+.include 'markdown/actions_gen.pir'
 .include 'markdown/builtins.pir'
 .include 'markdown/Node.pir'
 

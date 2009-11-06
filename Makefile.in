@@ -37,8 +37,8 @@ PBC_TO_EXE    := $(BIN_DIR)/pbc_to_exe@exe@
 SOURCES := \
   markdown/Compiler.pir \
   markdown/Node.pir \
-  markdown/gen_grammar.pir \
-  markdown/gen_actions.pir \
+  markdown/grammar_gen.pir \
+  markdown/actions_gen.pir \
   markdown/builtins.pir \
   markdown/builtins/is_strict.pir \
   markdown/builtins/length.pir
@@ -49,7 +49,7 @@ BUILD_CLEANUPS := \
   man \
   markdown/markdown.pbc \
   markdown.pbc \
-  "markdown/gen_*.pir" \
+  "markdown/*_gen.pir" \
   "*.c" \
   "*$(O)" \
 #IF(win32):  parrot-markdown.exe \
@@ -71,14 +71,14 @@ markdown/markdown.pbc: $(SOURCES)
 markdown.pbc: markdown.pir
 	$(PARROT) $(PARROT_ARGS) -o markdown.pbc markdown.pir
 
-markdown/gen_grammar.pir: $(PERL6GRAMMAR) markdown/parser/grammar.pg
+markdown/grammar_gen.pir: $(PERL6GRAMMAR) markdown/grammar.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
-	    --output=markdown/gen_grammar.pir \
-	    markdown/parser/grammar.pg
+	    --output=markdown/grammar_gen.pir \
+	    markdown/grammar.pg
 
-markdown/gen_actions.pir: $(NQP) markdown/parser/actions.pm
-	$(PARROT) $(PARROT_ARGS) $(NQP) --output=markdown/gen_actions.pir \
-	    --target=pir markdown/parser/actions.pm
+markdown/actions_gen.pir: $(NQP) markdown/actions.pm
+	$(PARROT) $(PARROT_ARGS) $(NQP) --output=markdown/actions_gen.pir \
+	    --target=pir markdown/actions.pm
 
 installable: installable_markdown@exe@
 

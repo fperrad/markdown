@@ -12,7 +12,7 @@ installable_markdown
 *.tmp
 man
 
-src/gen_*.pir
+markdown/*_gen.pir
 
 t/*.text
 t/*.html
