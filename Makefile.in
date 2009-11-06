@@ -36,15 +36,15 @@ PBC_TO_EXE    := $(BIN_DIR)/pbc_to_exe@exe@
 
 
 SOURCES := \
-  src/Compiler.pir \
-  src/Node.pir \
-  src/gen_grammar.pir \
-  src/gen_actions.pir \
-  src/gen_builtins.pir
+  markdown/Compiler.pir \
+  markdown/Node.pir \
+  markdown/gen_grammar.pir \
+  markdown/gen_actions.pir \
+  markdown/gen_builtins.pir
 
 BUILTINS_PIR := \
-  src/builtins/is_strict.pir \
-  src/builtins/length.pir
+  markdown/builtins/is_strict.pir \
+  markdown/builtins/length.pir
 
 DOCS := README
 
@@ -52,7 +52,7 @@ BUILD_CLEANUPS := \
   man \
   markdown/markdown.pbc \
   markdown.pbc \
-  "src/gen_*.pir" \
+  "markdown/gen_*.pir" \
   "*.c" \
   "*$(O)" \
 #IF(win32):  parrot-markdown.exe \
@@ -69,22 +69,22 @@ build: markdown/markdown.pbc markdown.pbc
 all: build installable
 
 markdown/markdown.pbc: $(SOURCES)
-	$(PARROT) $(PARROT_ARGS) -o markdown/markdown.pbc src/Compiler.pir
+	$(PARROT) $(PARROT_ARGS) -o markdown/markdown.pbc markdown/Compiler.pir
 
 markdown.pbc: markdown.pir
 	$(PARROT) $(PARROT_ARGS) -o markdown.pbc markdown.pir
 
-src/gen_grammar.pir: $(PERL6GRAMMAR) src/parser/grammar.pg
+markdown/gen_grammar.pir: $(PERL6GRAMMAR) markdown/parser/grammar.pg
 	$(PARROT) $(PARROT_ARGS) $(PERL6GRAMMAR) \
-	    --output=src/gen_grammar.pir \
-	    src/parser/grammar.pg
+	    --output=markdown/gen_grammar.pir \
+	    markdown/parser/grammar.pg
 
-src/gen_actions.pir: $(NQP) src/parser/actions.pm
-	$(PARROT) $(PARROT_ARGS) $(NQP) --output=src/gen_actions.pir \
-	    --target=pir src/parser/actions.pm
+markdown/gen_actions.pir: $(NQP) markdown/parser/actions.pm
+	$(PARROT) $(PARROT_ARGS) $(NQP) --output=markdown/gen_actions.pir \
+	    --target=pir markdown/parser/actions.pm
 
-src/gen_builtins.pir: $(BUILTINS_PIR)
-	$(CAT) $(BUILTINS_PIR) > src/gen_builtins.pir
+markdown/gen_builtins.pir: $(BUILTINS_PIR)
+	$(CAT) $(BUILTINS_PIR) > markdown/gen_builtins.pir
 
 installable: installable_markdown@exe@
 
@@ -132,8 +132,8 @@ t/MarkdownTest_1.0: t/MarkdownTest_1.0.zip
 
 codetest: codetest-c codetest-make codetest-perl codetest-pir codetest-pod
 
-T_MAKE  := config//makefiles//root.in
-T_PIR   := markdown.pir src//Compiler.pir src//Node.pir src//builtins//length.pir \
+T_MAKE  := Makefile.in
+T_PIR   := markdown.pir markdown//Compiler.pir markdown//Node.pir markdown//builtins//length.pir \
            Configure.pir t/*.t
 
 codetest-c:
