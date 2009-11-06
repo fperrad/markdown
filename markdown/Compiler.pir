@@ -650,7 +650,7 @@ Return generated HTML for all of its children.
 
 .include 'markdown/gen_grammar.pir'
 .include 'markdown/gen_actions.pir'
-.include 'markdown/gen_builtins.pir'
+.include 'markdown/builtins.pir'
 .include 'markdown/Node.pir'
 
 

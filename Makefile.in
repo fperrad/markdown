@@ -21,7 +21,6 @@ PCT           := $(LIB_DIR)/library/PCT.pbc
 
 ## Setup some commands
 PERL          := @perl@
-CAT           := @cat@
 CHMOD         := @chmod@
 CP            := @cp@
 MKPATH        := @mkpath@
@@ -40,9 +39,7 @@ SOURCES := \
   markdown/Node.pir \
   markdown/gen_grammar.pir \
   markdown/gen_actions.pir \
-  markdown/gen_builtins.pir
-
-BUILTINS_PIR := \
+  markdown/builtins.pir \
   markdown/builtins/is_strict.pir \
   markdown/builtins/length.pir
 
@@ -82,9 +79,6 @@ markdown/gen_grammar.pir: $(PERL6GRAMMAR) markdown/parser/grammar.pg
 markdown/gen_actions.pir: $(NQP) markdown/parser/actions.pm
 	$(PARROT) $(PARROT_ARGS) $(NQP) --output=markdown/gen_actions.pir \
 	    --target=pir markdown/parser/actions.pm
-
-markdown/gen_builtins.pir: $(BUILTINS_PIR)
-	$(CAT) $(BUILTINS_PIR) > markdown/gen_builtins.pir
 
 installable: installable_markdown@exe@
 
