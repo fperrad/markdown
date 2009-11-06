@@ -19,7 +19,7 @@
 
     # Here, do the job
     push_eh _handler
-    genfile('config/makefiles/root.in', 'Makefile', config)
+    genfile('Makefile.in', 'Makefile', config)
     pop_eh
 
     # Give the user a hint of next action

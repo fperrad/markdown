@@ -91,7 +91,7 @@ installable: installable_markdown@exe@
 installable_markdown@exe@: markdown.pbc
 	$(PBC_TO_EXE) markdown.pbc --install
 
-Makefile: config/makefiles/root.in
+Makefile: Makefile.in
 	$(PARROT) Configure.pir
 
 # This is a listing of all targets, that are meant to be called by users
