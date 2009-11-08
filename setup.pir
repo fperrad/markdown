@@ -22,6 +22,9 @@ No Configure step, no Makefile generated.
     $S0 = shift args
     load_bytecode 'distutils.pbc'
 
+    .const 'Sub' spectest = 'spectest'
+    register_step('spectest', spectest)
+
     # build
     $P0 = new 'Hash'
     $P1 = new 'Hash'
@@ -56,6 +59,18 @@ SOURCES
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
 
+.sub 'spectest'
+    .param pmc kv :slurpy :named
+    $I0 = file_exists('t/MarkdownTest_1.0.zip')
+    if $I0 goto L1
+    system('cd t && perl -MLWP::Simple -e "getstore(q{http://daringfireball.net/projects/downloads/MarkdownTest_1.0.zip}, q{MarkdownTest_1.0.zip});"')
+  L1:
+    $I0 = file_exists('t/MarkdownTest_1.0')
+    if $I0 goto L2
+    system('cd t && perl -MArchive::Zip -e "Archive::Zip->new(q{MarkdownTest_1.0.zip})->extractTree();"')
+  L2:
+    run_step('test', kv :flat :named)
+.end
 
 # Local Variables:
 #   mode: pir
