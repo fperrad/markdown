@@ -44,8 +44,7 @@ markdown/builtins/is_strict.pir
 markdown/builtins/length.pir
 SOURCES
     $P3['markdown/markdown.pbc'] = $P4
-    $P5 = split ' ', 'markdown.pir'
-    $P3['markdown.pbc'] = $P5
+    $P3['markdown.pbc'] = 'markdown.pir'
     $P0['pbc_pir'] = $P3
     $P6 = new 'Hash'
     $P6['parrot-markdown'] = 'markdown.pbc'
@@ -54,8 +53,7 @@ SOURCES
     $S0 = get_parrot()
     $P0['prove_exec'] = $S0
     # install
-    $P7 = split ' ', 'markdown/markdown.pbc'
-    $P0['inst_lang'] = $P7
+    $P0['inst_lang'] = 'markdown/markdown.pbc'
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
 
