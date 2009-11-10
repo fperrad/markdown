@@ -30,9 +30,11 @@ No Configure step, no Makefile generated.
     $P1 = new 'Hash'
     $P1['markdown/grammar_gen.pir'] = 'markdown/grammar.pg'
     $P0['pir_pge'] = $P1
+
     $P2 = new 'Hash'
     $P2['markdown/actions_gen.pir'] = 'markdown/actions.pm'
     $P0['pir_nqp'] = $P2
+
     $P3 = new 'Hash'
     $P4 = split "\n", <<'SOURCES'
 markdown/Compiler.pir
@@ -46,18 +48,21 @@ SOURCES
     $P3['markdown/markdown.pbc'] = $P4
     $P3['markdown.pbc'] = 'markdown.pir'
     $P0['pbc_pir'] = $P3
+
     $P6 = new 'Hash'
     $P6['parrot-markdown'] = 'markdown.pbc'
     $P0['exe_pbc'] = $P6
     # test
+
     $S0 = get_parrot()
     $P0['prove_exec'] = $S0
+
     # install
     $P0['inst_lang'] = 'markdown/markdown.pbc'
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
 
-.sub 'spectest'
+.sub 'spectest' :anon
     .param pmc kv :slurpy :named
     $I0 = file_exists('t/MarkdownTest_1.0.zip')
     if $I0 goto L1
@@ -67,6 +72,7 @@ SOURCES
     if $I0 goto L2
     system('cd t && perl -MArchive::Zip -e "Archive::Zip->new(q{MarkdownTest_1.0.zip})->extractTree();"')
   L2:
+
     run_step('test', kv :flat :named)
 .end
 
