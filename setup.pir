@@ -51,9 +51,9 @@ SOURCES
 
     $P6 = new 'Hash'
     $P6['parrot-markdown'] = 'markdown.pbc'
-    $P0['exe_pbc'] = $P6
-    # test
+    $P0['installable_pbc'] = $P6
 
+    # test
     $S0 = get_parrot()
     $P0['prove_exec'] = $S0
 
