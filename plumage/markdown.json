@@ -21,27 +21,23 @@
         "fetch"    : {
             "type" : "repository"
         },
-        "configure": {
-            "type" : "perl5_configure"
-        },
         "build"    : {
-            "type" : "make"
+            "type" : "parrot_setup"
         },
         "test"     : {
-            "type" : "make"
+            "type" : "parrot_setup"
         },
         "install"  : {
-            "type" : "make"
+            "type" : "parrot_setup"
         }
     },
     "dependency-info"  : {
         "provides"     : ["markdown"],
         "requires"     : {
             "fetch"    : ["git"],
-            "configure": ["perl5"],
-            "build"    : ["perl5", "make"],
-            "test"     : ["perl5", "make"],
-            "install"  : ["perl5", "make"],
+            "build"    : [],
+            "test"     : ["perl"],
+            "install"  : [],
             "runtime"  : []
         }
     },
