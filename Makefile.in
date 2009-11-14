@@ -75,7 +75,7 @@ markdown/grammar_gen.pir: $(PERL6GRAMMAR) markdown/grammar.pg
 	    --output=markdown/grammar_gen.pir \
 	    markdown/grammar.pg
 
-markdown/actions_gen.pir: $(NQP) markdown/actions.nqp
+markdown/actions_gen.pir: markdown/actions.nqp
 	$(NQP) --output=markdown/actions_gen.pir \
 	    --target=pir markdown/actions.nqp
 
