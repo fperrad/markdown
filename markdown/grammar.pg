@@ -402,14 +402,14 @@ token _Sc { '(' | ')' | '>' }
 
 token Title {
     # TitleSingle
-    | '\'' ( [ <!_TitleS> <!Newline> . ]* ) '\''
+    | \x27 ( [ <!_TitleS> <!Newline> . ]* ) \x27
     # TitleDouble
     | '"' ( [ <!_TitleD> <!Newline> . ]* ) '"'
     | ( '' )
 }
 
 token _TitleS {
-    '\'' <.Sp> [ ')' | <.Newline> ]
+    \x27 <.Sp> [ ')' | <.Newline> ]
 }
 
 token _TitleD {
@@ -446,7 +446,7 @@ token RefSrc { <.Nonspacechar>+ }
 
 token RefTitle {
     # RefTitleSingle
-    | '\'' ( [ <!_RefTitleS> . ]* ) '\''
+    | \x27 ( [ <!_RefTitleS> . ]* ) \x27
     # RefTitleDouble
     | '"' ( [ <!_RefTitleD> . ]* ) '"'
     # RefTitleParens
@@ -456,7 +456,7 @@ token RefTitle {
 }
 
 token _RefTitleS {
-    [ '\'' <.Sp> <.Newline> | <.Newline> ]
+    [ \x27 <.Sp> <.Newline> | <.Newline> ]
 }
 
 token _RefTitleD {
@@ -536,7 +536,7 @@ token BlankLine { <.Sp> <.Newline> {*} }
 
 token Quoted {
     | '"' <-["]>* '"'
-    | '\'' <-[']>* '\''
+    | \x27 <-[']>* \x27
 }
 
 token HtmlAttribute {
@@ -572,7 +572,7 @@ token Sp { <Spacechar>* }
 
 token Spnl { <.Sp> [<.Newline> <.Sp>]? }
 
-token SpecialChar { '*' | '_' | '`' | '&' | '[' | ']' | '<' | '!' | '\\' | '.' | '-' | '\'' | '"' | '^' }
+token SpecialChar { '*' | '_' | '`' | '&' | '[' | ']' | '<' | '!' | '\\' | '.' | '-' | \x27 | '"' | '^' }
 
 token NormalChar { <!SpecialChar> <!Spacechar> <!Newline> . }
 
@@ -611,7 +611,7 @@ token Smart {
 }
 
 token Apostrophe {
-    '\''
+    \x27
     {*}
 }
 
