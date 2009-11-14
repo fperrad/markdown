@@ -32,8 +32,8 @@ No Configure step, no Makefile generated.
     $P0['pir_pge'] = $P1
 
     $P2 = new 'Hash'
-    $P2['markdown/actions_gen.pir'] = 'markdown/actions.pm'
-    $P0['pir_nqp'] = $P2
+    $P2['markdown/actions_gen.pir'] = 'markdown/actions.nqp'
+    $P0['pir_nqp-rx'] = $P2
 
     $P3 = new 'Hash'
     $P4 = split "\n", <<'SOURCES'

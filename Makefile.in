@@ -16,8 +16,6 @@ O             := @o@
 
 # Various paths
 PERL6GRAMMAR  := $(LIB_DIR)/library/PGE/Perl6Grammar.pbc
-NQP           := $(LIB_DIR)/languages/nqp/nqp.pbc
-PCT           := $(LIB_DIR)/library/PCT.pbc
 
 ## Setup some commands
 PERL          := @perl@
@@ -27,6 +25,7 @@ MKPATH        := @mkpath@
 RM_F          := @rm_f@
 RM_RF         := @rm_rf@
 POD2MAN       := pod2man
+NQP           := $(BIN_DIR)/parrot-nqp@exe@
 PARROT        := $(BIN_DIR)/parrot@exe@
 PBC_TO_EXE    := $(BIN_DIR)/pbc_to_exe@exe@
 #IF(darwin):
@@ -76,9 +75,9 @@ markdown/grammar_gen.pir: $(PERL6GRAMMAR) markdown/grammar.pg
 	    --output=markdown/grammar_gen.pir \
 	    markdown/grammar.pg
 
-markdown/actions_gen.pir: $(NQP) markdown/actions.pm
-	$(PARROT) $(PARROT_ARGS) $(NQP) --output=markdown/actions_gen.pir \
-	    --target=pir markdown/actions.pm
+markdown/actions_gen.pir: $(NQP) markdown/actions.nqp
+	$(NQP) --output=markdown/actions_gen.pir \
+	    --target=pir markdown/actions.nqp
 
 installable: installable_markdown@exe@
 
