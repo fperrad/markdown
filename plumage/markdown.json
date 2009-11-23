@@ -13,8 +13,8 @@
             "uri"  : "http://www.perlfoundation.org/artistic_license_2_0"
         },
         "copyright_holder" : "Parrot Foundation",
-        "generated_by"     : "Francois Perrad <francois.perrad@gadz.org>",
-        "keywords"         : ["markdown"],
+        "generated_by"     : "distutils",
+        "keywords"         : ["markdown", "wiki"],
         "description"      : "This is the port of the Markdown, a lightweight markup language, on the Parrot VM."
     },
     "instructions" : {
