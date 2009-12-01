@@ -1,4 +1,4 @@
-#! /usr/local/bin/parrot
+#!/usr/bin/env parrot
 # Copyright (C) 2009, Parrot Foundation.
 
 =head1 NAME
@@ -25,8 +25,21 @@ No Configure step, no Makefile generated.
     .const 'Sub' spectest = 'spectest'
     register_step('spectest', spectest)
 
-    # build
     $P0 = new 'Hash'
+    $P0['name'] = 'Markdown'
+    $P0['abstract'] = 'Markdown on Parrot'
+    $P0['authority'] = 'http://github.com/fperrad'
+    $P0['description'] = 'This is the port of the Markdown, a lightweight markup language, on the Parrot VM.'
+    $P5 = split ',', 'markdown,wiki'
+    $P0['keywords'] = $P5
+    $P0['license_type'] = 'Artistic License 2.0'
+    $P0['license_uri'] = 'http://www.perlfoundation.org/artistic_license_2_0'
+    $P0['copyright_holder'] = 'Parrot Foundation'
+    $P0['checkout_uri'] = 'git://github.com/fperrad/markdown.git'
+    $P0['browser_uri'] = 'http://github.com/fperrad/markdown'
+    $P0['project_uri'] = 'http://github.com/fperrad/markdown'
+
+    # build
     $P1 = new 'Hash'
     $P1['markdown/grammar_gen.pir'] = 'markdown/grammar.pg'
     $P0['pir_pge'] = $P1

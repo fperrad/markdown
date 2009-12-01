@@ -1,3 +1,4 @@
+MANIFEST
 Makefile
 
 *.pbc
@@ -20,3 +21,7 @@ t/*.parse
 t/*.past
 t/*.zip
 t/MarkdownTest_1.0
+
+*.tar.gz
+*.zip
+*.patch
