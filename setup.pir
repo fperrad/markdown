@@ -77,13 +77,16 @@ SOURCES
 
 .sub 'spectest' :anon
     .param pmc kv :slurpy :named
+    .local string cmd
     $I0 = file_exists('t/MarkdownTest_1.0.zip')
     if $I0 goto L1
-    system('cd t && perl -MLWP::Simple -e "getstore(q{http://daringfireball.net/projects/downloads/MarkdownTest_1.0.zip}, q{MarkdownTest_1.0.zip});"')
+    cmd = 'cd t && perl -MLWP::Simple -e "getstore(q{http://daringfireball.net/projects/downloads/MarkdownTest_1.0.zip}, q{MarkdownTest_1.0.zip});"'
+    system(cmd, 1 :named('verbose'))
   L1:
     $I0 = file_exists('t/MarkdownTest_1.0')
     if $I0 goto L2
-    system('cd t && perl -MArchive::Zip -e "Archive::Zip->new(q{MarkdownTest_1.0.zip})->extractTree();"')
+    cmd  = 'cd t && perl -MArchive::Zip -e "Archive::Zip->new(q{MarkdownTest_1.0.zip})->extractTree();"'
+    system(cmd, 1 :named('verbose'))
   L2:
 
     run_step('test', kv :flat :named)
