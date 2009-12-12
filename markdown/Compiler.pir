@@ -19,12 +19,13 @@ object.
     load_bytecode 'PCT.pbc'
 
     .local pmc p6meta
-    p6meta = new 'P6metaclass'
-    $P0 = p6meta.'new_class'('Markdown::Compiler', 'parent'=>'PCT::HLLCompiler')
-    $P1 = $P0.'new'()
+    p6meta = get_hll_global 'P6metaclass'
+    $P1 = p6meta.'new_class'('Markdown::Compiler', 'parent'=>'PCT::HLLCompiler')
     $P1.'language'('markdown')
-    $P1.'parsegrammar'('Markdown::Grammar')
-    $P1.'parseactions'('Markdown::Grammar::Actions')
+    $P0 = get_hll_global ['Markdown'], 'Grammar'
+    $P1.'parsegrammar'($P0)
+    $P0 = get_hll_global ['Markdown';'Grammar'], 'Actions'
+    $P1.'parseactions'($P0)
     $P1.'removestage'('post')
     $P1.'addstage'('html', 'before' => 'pir')
 .end
