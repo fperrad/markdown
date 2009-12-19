@@ -72,6 +72,11 @@ SOURCES
 
     # install
     $P0['inst_lang'] = 'markdown/markdown.pbc'
+
+    # dist
+    $P7 = split ' ', 'CREDITS MAINTAINER README'
+    $P0['doc_files'] = $P7
+
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
 
