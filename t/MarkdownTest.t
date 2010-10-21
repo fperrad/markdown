@@ -15,6 +15,7 @@ Run the tests of the official test suite.
 =cut
 
 .sub 'main' :main
+    $P0 = loadlib 'os'
     load_language 'markdown'
 
     .include 'test_more.pir'
