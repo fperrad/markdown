@@ -49,13 +49,13 @@ Transform MAST C<source> into a String containing HTML.
     .param pmc source
     .param pmc adverbs         :slurpy :named
 
-    new $P0, 'CodeString'
-    $P0 = <<'PIRCODE'
+    new $P0, 'StringBuilder'
+    push $P0, <<'PIRCODE'
 .sub 'main' :anon
     $S0 = <<'PIR'
 PIRCODE
-    $P0 .= source
-    $P0 .= <<'PIRCODE'
+    push $P0, source
+    push $P0, <<'PIRCODE'
 PIR
     .return ($S0)
 .end
@@ -203,27 +203,26 @@ Return generated HTML for all of its children.
     .local int first
     first = 1
     .local pmc code, iter
-    code = new 'CodeString'
+    code = new 'StringBuilder'
     iter = node.'iterator'()
   iter_loop:
     unless iter goto iter_end
     .local pmc cpast
     cpast = shift iter
-    $P0 = self.'html'(cpast)
-    $I0 = elements $P0
-    unless $I0 goto iter_loop
+    $S0 = self.'html'(cpast)
+    if $S0 == '' goto iter_loop
     unless first goto L1
     first = 0
     unless has_fsep goto L2
-    code .= fsep
+    push code, fsep
     goto L2
   L1:
     unless has_ssep goto L2
-    code .= ssep
+    push code, ssep
   L2:
-    code .= $P0
+    push code, $S0 
     unless has_esep goto L3
-    code .= esep
+    push code, esep
   L3:
     goto iter_loop
   iter_end:
@@ -257,10 +256,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'HorizontalRule'])
     .param pmc node
-    .local pmc code
-    new code, 'CodeString'
-    set code, "<hr />"
-    .return (code)
+    .return ("<hr />")
 .end
 
 
@@ -279,10 +275,7 @@ Return generated HTML for all of its children.
     $S0 .= "</h"
     $S0 .= $S2
     $S0 .= ">"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 
@@ -296,10 +289,7 @@ Return generated HTML for all of its children.
     $S0 = "<p>"
     $S0 .= $S1
     $S0 .= "</p>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::CodeBlock node)
@@ -313,10 +303,7 @@ Return generated HTML for all of its children.
     $S0 = "<pre><code>"
     $S0 .= $S1
     $S0 .= "</code></pre>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::BlockQuote node)
@@ -330,10 +317,7 @@ Return generated HTML for all of its children.
     $S1 = self.'html_children'(node, '', "\n", "\n")
     $S0 .= $S1
     $S0 .= "</blockquote>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::ItemizedList node)
@@ -346,10 +330,7 @@ Return generated HTML for all of its children.
     $S0 = "<ul>\n"
     $S0 .= $S1
     $S0 .= "</ul>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::OrderedList node)
@@ -362,10 +343,7 @@ Return generated HTML for all of its children.
     $S0 = "<ol>\n"
     $S0 .= $S1
     $S0 .= "</ol>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::ListItem node)
@@ -384,10 +362,7 @@ Return generated HTML for all of its children.
   L2:
     $S0 .= $S1
     $S0 .= "</li>\n"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Link node)
@@ -402,15 +377,9 @@ Return generated HTML for all of its children.
     content = self.'html_children'(node)
     image = node.'image'()
     if image goto L1
-    $S0 = _link(url, title, content)
-    goto L2
+    .tailcall _link(url, title, content)
   L1:
-    $S0 = _image(url, title, content)
-  L2:
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .tailcall _image(url, title, content)
 .end
 
 .sub '_link' :anon
@@ -481,10 +450,7 @@ Return generated HTML for all of its children.
   L3:
     $S0 = _image(url, title, content)
   L5:
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Reference node)
@@ -493,10 +459,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Reference'])
     .param pmc node
-    .local pmc code
-    new code, 'CodeString'
-    set code, ''
-    .return (code)
+    .return ('')
 .end
 
 =item html(Markdown::Email node)
@@ -516,10 +479,7 @@ Return generated HTML for all of its children.
     $S1 = substr $S1, $I0
     $S0 .= $S1
     $S0 .= "</a>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Emphasis node)
@@ -532,10 +492,7 @@ Return generated HTML for all of its children.
     $S0 = "<em>"
     $S0 .= $S1
     $S0 .= "</em>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Strong node)
@@ -548,10 +505,7 @@ Return generated HTML for all of its children.
     $S0 = "<strong>"
     $S0 .= $S1
     $S0 .= "</strong>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Code node)
@@ -566,10 +520,7 @@ Return generated HTML for all of its children.
     $S0 = "<code>"
     $S0 .= $S1
     $S0 .= "</code>"
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Html node)
@@ -583,10 +534,7 @@ Return generated HTML for all of its children.
     unless $I0 goto L1
     $S0 = detabn($S0)
   L1:
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Line node)
@@ -601,10 +549,7 @@ Return generated HTML for all of its children.
     $S1 = detab($S1)
   L1:
     $S0 = escape_xml($S1)
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Word node)
@@ -615,10 +560,7 @@ Return generated HTML for all of its children.
     .param pmc node
     $S1 = node.'text'()
     $S0 = escape_xml($S1)
-    .local pmc code
-    new code, 'CodeString'
-    set code, $S0
-    .return (code)
+    .return ($S0)
 .end
 
 =item html(Markdown::Space node)
@@ -627,10 +569,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Space'])
     .param pmc node
-    .local pmc code
-    new code, 'CodeString'
-    set code, ' '
-    .return (code)
+    .return (' ')
 .end
 
 =item html(Markdown::Newline node)
@@ -639,10 +578,7 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Newline'])
     .param pmc node
-    .local pmc code
-    new code, 'CodeString'
-    set code, "\n"
-    .return (code)
+    .return ("\n")
 .end
 
 =back
