@@ -49,7 +49,7 @@ Transform MAST C<source> into a String containing HTML.
     .param pmc source
     .param pmc adverbs         :slurpy :named
 
-    new $P0, 'StringBuilder'
+    $P0 = new 'StringBuilder'
     push $P0, <<'PIRCODE'
 .sub 'main' :anon
     $S0 = <<'PIR'
@@ -266,16 +266,17 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Title'])
     .param pmc node
-    $S1 = self.'html_children'(node)
+    $P0 = new 'StringBuilder'
+    push $P0, "<h"
     $S2 = node.'level'()
-    $S0 = "<h"
-    $S0 .= $S2
-    $S0 .= ">"
-    $S0 .= $S1
-    $S0 .= "</h"
-    $S0 .= $S2
-    $S0 .= ">"
-    .return ($S0)
+    push $P0, $S2
+    push $P0, ">"
+    $S1 = self.'html_children'(node)
+    push $P0, $S1
+    push $P0, "</h"
+    push $P0, $S2
+    push $P0, ">"
+    .return ($P0)
 .end
 
 
@@ -285,11 +286,12 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Para'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<p>"
     $S1 = self.'html_children'(node)
-    $S0 = "<p>"
-    $S0 .= $S1
-    $S0 .= "</p>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</p>"
+    .return ($P0)
 .end
 
 =item html(Markdown::CodeBlock node)
@@ -298,12 +300,13 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'CodeBlock'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<pre><code>"
     $S1 = self.'html_children'(node)
     $S1 = escape_code($S1)
-    $S0 = "<pre><code>"
-    $S0 .= $S1
-    $S0 .= "</code></pre>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</code></pre>"
+    .return ($P0)
 .end
 
 =item html(Markdown::BlockQuote node)
@@ -312,12 +315,13 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'BlockQuote'])
     .param pmc node
-    $S0 = "<blockquote>\n"
-    $S0 .= "  "
+    $P0 = new 'StringBuilder'
+    push $P0, "<blockquote>\n"
+    push $P0, "  "
     $S1 = self.'html_children'(node, '', "\n", "\n")
-    $S0 .= $S1
-    $S0 .= "</blockquote>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</blockquote>"
+    .return ($P0)
 .end
 
 =item html(Markdown::ItemizedList node)
@@ -326,11 +330,12 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'ItemizedList'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<ul>\n"
     $S1 = self.'html_children'(node)
-    $S0 = "<ul>\n"
-    $S0 .= $S1
-    $S0 .= "</ul>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</ul>"
+    .return ($P0)
 .end
 
 =item html(Markdown::OrderedList node)
@@ -339,11 +344,12 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'OrderedList'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<ol>\n"
     $S1 = self.'html_children'(node)
-    $S0 = "<ol>\n"
-    $S0 .= $S1
-    $S0 .= "</ol>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</ol>"
+    .return ($P0)
 .end
 
 =item html(Markdown::ListItem node)
@@ -352,7 +358,8 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'ListItem'])
     .param pmc node
-    $S0 = "<li>"
+    $P0 = new 'StringBuilder'
+    push $P0, "<li>"
     $I0 = node.'loose'()
     if $I0 goto L1
     $S1 = self.'html_children'(node)
@@ -360,9 +367,9 @@ Return generated HTML for all of its children.
   L1:
     $S1 = self.'html_children'(node, "<p>", "\n\n<p>", "</p>")
   L2:
-    $S0 .= $S1
-    $S0 .= "</li>\n"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</li>\n"
+    .return ($P0)
 .end
 
 =item html(Markdown::Link node)
@@ -386,34 +393,36 @@ Return generated HTML for all of its children.
     .param string url
     .param string title
     .param string content
-    $S0 = "<a href=\""
+    $P0 = new 'StringBuilder'
+    push $P0, "<a href=\""
     $S1 = escape_attr(url)
-    $S0 .= $S1
+    push $P0, $S1
     unless title goto L1
-    $S0 .= "\" title=\""
+    push $P0, "\" title=\""
     $S1 = escape_attr(title)
-    $S0 .= $S1
+    push $P0, $S1
   L1:
-    $S0 .= "\">"
-    $S0 .= content
-    $S0 .= "</a>"
-    .return ($S0)
+    push $P0, "\">"
+    push $P0, content
+    push $P0, "</a>"
+    .return ($P0)
 .end
 
 .sub '_image' :anon
     .param string url
     .param string title
     .param string content
-    $S0 = "<img src=\""
+    $P0 = new 'StringBuilder'
+    push $P0, "<img src=\""
     $S1 = escape_attr(url)
-    $S0 .= $S1
-    $S0 .= "\" alt=\""
-    $S0 .= content
-    $S0 .= "\" title=\""
+    push $P0, $S1
+    push $P0, "\" alt=\""
+    push $P0, content
+    push $P0, "\" title=\""
     $S1 = escape_attr(title)
-    $S0 .= $S1
-    $S0 .= "\" />"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "\" />"
+    .return ($P0)
 .end
 
 =item html(Markdown::RefLink node)
@@ -433,8 +442,7 @@ Return generated HTML for all of its children.
     title = $P1[1]
     goto L2
   L1:
-    $S0 = node.'text'()
-    goto L5
+    .tailcall node.'text'()
   L2:
     .local string content, image
     content = self.'html_children'(node)
@@ -445,12 +453,9 @@ Return generated HTML for all of its children.
     $I0 -= 2
     content = substr key, 1, $I0
   L4:
-    $S0 = _link(url, title, content)
-    goto L5
+    .tailcall _link(url, title, content)
   L3:
-    $S0 = _image(url, title, content)
-  L5:
-    .return ($S0)
+    .tailcall _image(url, title, content)
 .end
 
 =item html(Markdown::Reference node)
@@ -468,18 +473,19 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Email'])
     .param pmc node
-    $S0 = "<a href=\""
+    $P0 = new 'StringBuilder'
+    push $P0, "<a href=\""
     $S1 = node.'text'()
     $S1 = 'mailto:' . $S1
     $S1 = obscure_text($S1)
-    $S0 .= $S1
-    $S0 .= "\">"
+    push $P0, $S1
+    push $P0, "\">"
     $I0 = index $S1, ':'
     inc $I0
     $S1 = substr $S1, $I0
-    $S0 .= $S1
-    $S0 .= "</a>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</a>"
+    .return ($P0)
 .end
 
 =item html(Markdown::Emphasis node)
@@ -488,11 +494,12 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Emphasis'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<em>"
     $S1 = self.'html_children'(node)
-    $S0 = "<em>"
-    $S0 .= $S1
-    $S0 .= "</em>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</em>"
+    .return ($P0)
 .end
 
 =item html(Markdown::Strong node)
@@ -501,11 +508,12 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Strong'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<strong>"
     $S1 = self.'html_children'(node)
-    $S0 = "<strong>"
-    $S0 .= $S1
-    $S0 .= "</strong>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</strong>"
+    .return ($P0)
 .end
 
 =item html(Markdown::Code node)
@@ -514,13 +522,14 @@ Return generated HTML for all of its children.
 
 .sub 'html' :method :multi(_, ['Markdown'; 'Code'])
     .param pmc node
+    $P0 = new 'StringBuilder'
+    push $P0, "<code>"
     $S1 = node.'text'()
     $S1 = escape_xml($S1)
     $S1 = escape_code($S1)
-    $S0 = "<code>"
-    $S0 .= $S1
-    $S0 .= "</code>"
-    .return ($S0)
+    push $P0, $S1
+    push $P0, "</code>"
+    .return ($P0)
 .end
 
 =item html(Markdown::Html node)
@@ -548,8 +557,7 @@ Return generated HTML for all of its children.
     unless $I0 goto L1
     $S1 = detab($S1)
   L1:
-    $S0 = escape_xml($S1)
-    .return ($S0)
+    .tailcall escape_xml($S1)
 .end
 
 =item html(Markdown::Word node)
@@ -559,8 +567,7 @@ Return generated HTML for all of its children.
 .sub 'html' :method :multi(_, ['Markdown'; 'Word'])
     .param pmc node
     $S1 = node.'text'()
-    $S0 = escape_xml($S1)
-    .return ($S0)
+    .tailcall escape_xml($S1)
 .end
 
 =item html(Markdown::Space node)
