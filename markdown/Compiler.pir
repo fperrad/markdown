@@ -73,8 +73,10 @@ PIRCODE
 
 .namespace ['Markdown'; 'HTML'; 'Compiler']
 
+.loadlib 'math_ops'
+
 .sub '__onload' :anon :load :init
-    load_bytecode 'Math/Rand.pbc'
+    srand 0
 
     $P0 = get_hll_global 'P6metaclass'
     $P0 = $P0.'new_class'('Markdown::HTML::Compiler')
@@ -161,13 +163,10 @@ PIRCODE
     $S1 = shift $P0
     if $S1 == '@' goto L_dec
     if $S1 == ':' goto L_raw
-    .local pmc rand
-    rand = get_root_global [ 'parrot'; 'Math'; 'Rand' ], 'rand'
-    $I0 = rand()
+    $I0 = rand 100
     # roughly 10% raw, 45% hex, 45% dec
-    $I0 %= 20
-    if $I0 >= 18 goto L_raw
-    if $I0 >= 9 goto L_hex
+    if $I0 >= 90 goto L_raw
+    if $I0 >= 45 goto L_hex
   L_dec:
     $I1 = ord $S1
     $S1 = $I1
@@ -220,7 +219,7 @@ Return generated HTML for all of its children.
     unless has_ssep goto L2
     push code, ssep
   L2:
-    push code, $S0 
+    push code, $S0
     unless has_esep goto L3
     push code, esep
   L3:
