@@ -66,6 +66,10 @@ SOURCES
     $P6['parrot-markdown'] = 'markdown.pbc'
     $P0['installable_pbc'] = $P6
 
+    $P7 = new 'Hash'
+    $P7['man/man1/parrot-markdown.1'] = 'markdown.pir'
+    $P0['man_pod'] = $P7
+
     # test
     $S0 = get_parrot()
     $P0['prove_exec'] = $S0
@@ -74,8 +78,8 @@ SOURCES
     $P0['inst_lang'] = 'markdown/markdown.pbc'
 
     # dist
-    $P7 = split ' ', 'CREDITS MAINTAINER README'
-    $P0['doc_files'] = $P7
+    $P8 = split ' ', 'CREDITS MAINTAINER README'
+    $P0['doc_files'] = $P8
 
     .tailcall setup(args :flat, $P0 :flat :named)
 .end
