@@ -1,9 +1,9 @@
-# Copyright (C) 2008-2009, Parrot Foundation.
-# $Id$
 
-=head1 A Markdown compiler.
+=head1 NAME
 
-=head2 Synopsis
+parrot-markdown - a Markdown compiler
+
+=head1 SYNOPSIS
 
 as a command line (without interactive mode) :
 
@@ -36,10 +36,6 @@ or as a compiler from Rakudo :
 
      say eval($markdown, :lang<markdown>);
 
-=head2 Description
-
-This is the entry file for the Markdown compiler.
-
 =cut
 
 
@@ -60,13 +56,24 @@ This is the entry file for the Markdown compiler.
 .end
 
 
-=head2 See Also
+=head1 SEE ALSO
 
 L<http://daringfireball.net/projects/markdown/>
 
 L<http://en.wikipedia.org/wiki/Markdown>
 
 L<http://en.wikipedia.org/wiki/Lightweight_markup_language>
+
+=head1 AUTHOR
+
+Francois Perrad
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2008-2011, Parrot Foundation.
+
+This program is free software; you may redistribute it and/or modify
+it under the same terms as Parrot itself.
 
 =cut
 
